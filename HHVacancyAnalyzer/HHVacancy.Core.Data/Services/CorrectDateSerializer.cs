@@ -15,7 +15,8 @@ namespace HHVacancy.Core.Data.Services
             {
                 Converters = {
                     new DateTimeConverter()
-                }
+                },
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
             };
         }
 

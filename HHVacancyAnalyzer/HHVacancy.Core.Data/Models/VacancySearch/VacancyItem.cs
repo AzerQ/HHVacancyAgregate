@@ -54,7 +54,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         public Snippet Snippet { get; set; }
 
         [JsonPropertyName("type")]
-        public Type Type { get; set; }
+        public VacancyType Type { get; set; }
 
         [JsonPropertyName("url")]
         public string Url { get; set; }
@@ -94,7 +94,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         public Schedule Schedule { get; set; }
 
         [JsonPropertyName("sort_point_distance")]
-        public double SortPointDistance { get; set; }
+        public double? SortPointDistance { get; set; }
 
         [JsonPropertyName("working_days")]
         public List<WorkingDay> WorkingDays { get; set; }
@@ -115,7 +115,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         public Experience Experience { get; set; }
 
         [JsonPropertyName("show_logo_in_search")]
-        public bool ShowLogoInSearch { get; set; }
+        public bool? ShowLogoInSearch { get; set; }
     }
 
 }
