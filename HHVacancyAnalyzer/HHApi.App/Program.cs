@@ -1,21 +1,70 @@
-﻿using HHVacancy.Core.Data.Models.VacancySearch;
+﻿using Dumpify;
+using HHVacancy.Core.Data.Models.VacancySearch;
 using HHVacancy.Core.Data.Services;
+using System.Diagnostics;
 
 namespace HHApi.App
 {
-    internal class Program
+    public class TestHHApi
     {
+        IVacancyService vacancyService = new VacancyService();
+
+        public TestHHApi()
+        {
+        }
+
+
+        private VacancySearchRequest GetSampleRequest() =>
+            new VacancySearchRequest
+            {
+                Text = "C# разработчик удаленно",
+                OnlyWithSalary = true
+            };
+
+
+        public async Task TestGetVacancyAsync()
+        {
+            int id = 99955831;
+            var model = await vacancyService.GetVacancyById(id);
+            model.DumpConsole();
+        }
+
+        public async Task TestGetVacancySearchPageAsync()
+        {
+
+            var model = await vacancyService.GetVacancySearchPage(GetSampleRequest());
+            model.DumpConsole();
+        }
+
+        public async Task TestVacancyFullSearchAsync()
+        {
+            var fullSearchResults = new List<VacancyItem>(1000);
+
+            Stopwatch sw = Stopwatch.StartNew();
+
+            await foreach (var vacancyResult in vacancyService.SearchVacancies(GetSampleRequest()))
+            {
+                Console.WriteLine("Items on page {1} (Total items {0})", vacancyResult.Found, vacancyResult.Page);
+                fullSearchResults.AddRange(vacancyResult.Items);
+            }
+
+            sw.Stop();
+            sw.Elapsed.DumpConsole();
+        }
+    }
+
+    public class Program
+    {
+
+
         static async Task Main(string[] args)
         {
-            IVacancyService service = new VacancyService();
-            var vacancyData = await service.GetVacancyById(99955831);
+            TestHHApi testHHApi = new ();
 
-            var vacancySearchResult = await service.SearchVacancies(new VacancySearchRequest
-            {
-                Text = "C# разработчик",
-                Page = 0,
-                PerPage = 30
-            });
+            await testHHApi.TestGetVacancyAsync();
+            await testHHApi.TestGetVacancySearchPageAsync();
+            await testHHApi.TestVacancyFullSearchAsync();
+            Console.ReadLine();
         }
     }
 }

@@ -11,7 +11,7 @@ namespace HHVacancy.Core.Data.Models.Vacancy
         public int? From { get; set; }
 
         [JsonPropertyName("gross")]
-        public bool Gross { get; set; }
+        public bool? Gross { get; set; }
 
         [JsonPropertyName("to")]
         public int? To { get; set; }

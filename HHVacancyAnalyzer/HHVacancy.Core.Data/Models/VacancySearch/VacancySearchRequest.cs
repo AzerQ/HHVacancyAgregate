@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HHVacancy.Core.Data.Models.VacancySearch
@@ -8,9 +9,16 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
     /// </summary>
     public class VacancySearchRequest
     {
+        /// <summary>
+        /// Получить представление модели в виде словаря для QueryString параметров запроса
+        /// </summary>
+        /// <returns>Представление модели в виде словаря</returns>
         public Dictionary<string, object> ToDictionary()
         {
             var request = this;
+
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+
             // Преобразуем параметры запроса в словарь
             var queryParams = new Dictionary<string, object>
                 {
@@ -53,81 +61,116 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
             .Where(kv => kv.Value != null)  // Убираем параметры со значением null
             .ToDictionary(kv => kv.Key, kv => kv.Value);
 
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
+
             return queryParams;
 
+        }
+
+        /// <summary>
+        /// Получение словаря с перезаписанными параметрами запроса
+        /// </summary>
+        /// <param name="overrideParams">Параметры для переопределения</param>
+        /// <returns>Словарь с преопределенными значениями</returns>
+        public Dictionary<string, object> ToDictionary(Dictionary<string, object> overrideParams)
+        {
+            Dictionary<string, object> paramsDictionary = ToDictionary();
+
+            IEnumerable<KeyValuePair<string, object>> existingParms =
+                overrideParams.Where(kv => paramsDictionary.ContainsKey(kv.Key));
+
+            foreach (var existingParam in existingParms)
+            {
+                paramsDictionary[existingParam.Key] = existingParam.Value;
+            }
+            return paramsDictionary;
+        }
+
+        /// <summary>
+        /// Преобразовать в словарь параметров запроса, с перезаписанной пагинацией
+        /// </summary>
+        /// <param name="pageNumber">Номер страницы</param>
+        /// <param name="pageSize">Размер страницы</param>
+        /// <returns>Словарь с параметрами запроса</returns>
+        public Dictionary<string, object> ToDictionary(int pageNumber, int pageSize)
+        {
+            var newParams = new Dictionary<string, object>()
+                {{ "page", pageNumber },{ "per_page" ,pageSize }};
+
+            return ToDictionary(newParams);
         }
 
         /// <summary>
         /// Номер страницы.
         /// </summary>
 
-        public int Page { get; set; }
+        public int Page { get; set; } = 0;
 
         /// <summary>
         /// Количество элементов на странице.
         /// </summary>
 
-        public int PerPage { get; set; }
+        public int PerPage { get; set; } = 10;
 
         /// <summary>
         /// Область поиска. Возможные значения берутся из справочника vacancy_search_fields в /dictionaries.
         /// </summary>
 
-        public List<string> SearchField { get; set; }
+        public List<string>? SearchField { get; set; }
 
         /// <summary>
         /// Опыт работы. Id из справочника experience в /dictionaries.
         /// </summary>
 
-        public List<string> Experience { get; set; }
+        public List<string>? Experience { get; set; }
 
         /// <summary>
         /// Тип занятости. Id из справочника employment в /dictionaries.
         /// </summary>
 
-        public List<string> Employment { get; set; }
+        public List<string>? Employment { get; set; }
 
         /// <summary>
         /// График работы. Id из справочника schedule в /dictionaries.
         /// </summary>
 
-        public List<string> Schedule { get; set; }
+        public List<string>? Schedule { get; set; }
 
         /// <summary>
         /// Регион. Id из справочника /areas.
         /// </summary>
 
-        public List<string> Area { get; set; }
+        public List<string>? Area { get; set; }
 
         /// <summary>
         /// Ветка или станция метро. Id из справочника /metro.
         /// </summary>
 
-        public List<string> Metro { get; set; }
+        public List<string>? Metro { get; set; }
 
         /// <summary>
         /// Профессиональная область. Id из справочника /professional_roles.
         /// </summary>
 
-        public List<string> ProfessionalRole { get; set; }
+        public List<string>? ProfessionalRole { get; set; }
 
         /// <summary>
         /// Индустрия компании, разместившей вакансию. Id из справочника /industries.
         /// </summary>
 
-        public List<string> Industry { get; set; }
+        public List<string>? Industry { get; set; }
 
         /// <summary>
         /// Идентификатор работодателя.
         /// </summary>
 
-        public List<string> EmployerId { get; set; }
+        public List<string>? EmployerId { get; set; }
 
         /// <summary>
         /// Код валюты. Возможные значения берутся из справочника currency (ключ code) в /dictionaries.
         /// </summary>
 
-        public string Currency { get; set; }
+        public string? Currency { get; set; }
 
         /// <summary>
         /// Размер заработной платы. Если указано это поле, но не указано currency, то для currency используется значение RUR.
@@ -139,7 +182,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         /// Фильтр по меткам вакансий. Id из справочника vacancy_label в /dictionaries.
         /// </summary>
 
-        public List<string> Label { get; set; }
+        public List<string>? Label { get; set; }
 
         /// <summary>
         /// Показывать вакансии только с указанием зарплаты. По умолчанию false.
@@ -157,13 +200,13 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         /// Дата, которая ограничивает снизу диапазон дат публикации вакансий. Формат ISO 8601.
         /// </summary>
 
-        public string DateFrom { get; set; }
+        public DateTime? DateFrom { get; set; }
 
         /// <summary>
         /// Дата, которая ограничивает сверху диапазон дат публикации вакансий. Формат ISO 8601.
         /// </summary>
 
-        public string DateTo { get; set; }
+        public DateTime? DateTo { get; set; }
 
         /// <summary>
         /// Верхняя граница широты. Необходимо передавать одновременно все четыре параметра гео-координат.
@@ -192,8 +235,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         /// <summary>
         /// Сортировка списка вакансий. Возможные значения берутся из справочника vacancy_search_order в /dictionaries.
         /// </summary>
-
-        public string OrderBy { get; set; }
+        public string? OrderBy { get; set; }
 
         /// <summary>
         /// Значение географической широты точки, по расстоянию от которой будут отсортированы вакансии.
@@ -241,7 +283,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         /// Вакансии для подработки. Возможные значения: все элементы из working_days, working_time_intervals, working_time_modes, part, project, accept_temporary.
         /// </summary>
 
-        public List<string> PartTime { get; set; }
+        public List<string>? PartTime { get; set; }
 
         /// <summary>
         /// Если true — поиск происходит только по вакансиям временной работы. По умолчанию false.
@@ -265,6 +307,6 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         /// Текстовый запрос для поиска вакансий.
         /// </summary>
 
-        public string Text { get; set; }
+        public string? Text { get; set; }
     }
 }
