@@ -10,5 +10,8 @@
             ]
         }
     },
+    "remoteEnv": {
+        "HHAPITOKEN": "${{secrets.HHAPITOKEN}}"
+    },
     "postCreateCommand": "dotnet restore"
 }
