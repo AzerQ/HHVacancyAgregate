@@ -67,8 +67,7 @@ namespace HHVacancy.Core.Data.Services
         /// </summary>
         /// <returns>OAuth Bearer token</returns>
         private string GetApiToken() => 
-            Environment.GetEnvironmentVariable("HHAPITOKEN", EnvironmentVariableTarget.User) ??
-            Environment.GetEnvironmentVariable("HHAPITOKEN", EnvironmentVariableTarget.Machine);
+            Environment.GetEnvironmentVariable("HHAPITOKEN");
 
         /// <summary>
         /// Новый сервис для работы с данными вакансий сайта hh.ru
