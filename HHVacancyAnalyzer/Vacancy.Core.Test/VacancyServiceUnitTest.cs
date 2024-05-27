@@ -17,17 +17,17 @@ namespace Vacancy.Core.Test
         private static VacancySearchRequest GetSampleVacancySearchRequest() =>
             new VacancySearchRequest
             {
-                Text = "Экономист",
+                Text = "Р­РєРѕРЅРѕРјРёСЃС‚",
                 OnlyWithSalary = true
             };
 
         private static IVacancyService GetVacancyService() => new VacancyService();
 
         /// <summary>
-        /// Выбрать список случайных идентификаторов вакансий
+        /// Р’С‹Р±СЂР°С‚СЊ СЃРїРёСЃРѕРє СЃР»СѓС‡Р°Р№РЅС‹С… РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РІР°РєР°РЅСЃРёР№
         /// </summary>
-        /// <param name="count">Кол-во должно быть меньше или равно 100</param>
-        /// <returns>Список существующих идентификаторов вакансий</returns>
+        /// <param name="count">РљРѕР»-РІРѕ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РјРµРЅСЊС€Рµ РёР»Рё СЂР°РІРЅРѕ 100</param>
+        /// <returns>РЎРїРёСЃРѕРє СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… РёРґРµРЅС‚РёС„РёРєР°С‚РѕСЂРѕРІ РІР°РєР°РЅСЃРёР№</returns>
         private static IEnumerable<int> GetRandomVacancyIds(byte count)
         {
             VacancySearchRequest request = GetSampleVacancySearchRequest();
@@ -58,9 +58,9 @@ namespace Vacancy.Core.Test
         {
             VacancyFullModel vacancyFullModel = await _vacancyService.GetVacancyById(vacancyID);
 
-            Assert.IsNotNull(vacancyFullModel, "Модель вакансии имеет значение null!");
-            Assert.IsNotNull(vacancyFullModel.Name, "Имя вакансии имеет значение null!");
-            Assert.IsNotNull(vacancyFullModel.Experience, "Поле 'опыт вакансии' имеет значение null!");
+            Assert.IsNotNull(vacancyFullModel, "РњРѕРґРµР»СЊ РІР°РєР°РЅСЃРёРё РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ null!");
+            Assert.IsNotNull(vacancyFullModel.Name, "РРјСЏ РІР°РєР°РЅСЃРёРё РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ null!");
+            Assert.IsNotNull(vacancyFullModel.Experience, "РџРѕР»Рµ 'РѕРїС‹С‚ РІР°РєР°РЅСЃРёРё' РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ null!");
 
         }
 
@@ -78,15 +78,15 @@ namespace Vacancy.Core.Test
             VacancySearchResult vacancySearchPageModel = await _vacancyService
                                 .GetVacancySearchPage(request);
 
-            Assert.IsNotNull(vacancySearchPageModel, "Результат поиска ваканси имеет значение null!");
-            Assert.AreNotEqual(0, vacancySearchPageModel.Found, "Поле с кол-вом найденных значений = 0!");
-            Assert.AreNotEqual(0, vacancySearchPageModel.Pages, "Поле с кол-вом страниц = 0!");
-            Assert.AreNotEqual(0, vacancySearchPageModel.Items.Count, "Не найденны данные по запросу!");
+            Assert.IsNotNull(vacancySearchPageModel, "Р РµР·СѓР»СЊС‚Р°С‚ РїРѕРёСЃРєР° РІР°РєР°РЅСЃРё РёРјРµРµС‚ Р·РЅР°С‡РµРЅРёРµ null!");
+            Assert.AreNotEqual(0, vacancySearchPageModel.Found, "РџРѕР»Рµ СЃ РєРѕР»-РІРѕРј РЅР°Р№РґРµРЅРЅС‹С… Р·РЅР°С‡РµРЅРёР№ = 0!");
+            Assert.AreNotEqual(0, vacancySearchPageModel.Pages, "РџРѕР»Рµ СЃ РєРѕР»-РІРѕРј СЃС‚СЂР°РЅРёС† = 0!");
+            Assert.AreNotEqual(0, vacancySearchPageModel.Items.Count, "РќРµ РЅР°Р№РґРµРЅРЅС‹ РґР°РЅРЅС‹Рµ РїРѕ Р·Р°РїСЂРѕСЃСѓ!");
         }
-        [DataRow("Программист 1С")]
-        [DataRow("Программист Java")]
-        [DataRow("Системный администратор")]
-        [DataRow("Специалист информационной безопасности")]
+        [DataRow("РџСЂРѕРіСЂР°РјРјРёСЃС‚ 1РЎ")]
+        [DataRow("РџСЂРѕРіСЂР°РјРјРёСЃС‚ Java")]
+        [DataRow("РЎРёСЃС‚РµРјРЅС‹Р№ Р°РґРјРёРЅРёСЃС‚СЂР°С‚РѕСЂ")]
+        [DataRow("РЎРїРµС†РёР°Р»РёСЃС‚ РёРЅС„РѕСЂРјР°С†РёРѕРЅРЅРѕР№ Р±РµР·РѕРїР°СЃРЅРѕСЃС‚Рё")]
         [TestMethod]
         [TestCategory("GetVacancyFullSearchResults")]
         public async Task TestVacancyFullSearch(string searchString)
@@ -110,9 +110,9 @@ namespace Vacancy.Core.Test
             int totalItemsCount = fullSearchResults.Select(page=>page.Items.Count).Sum();
             int exceptedItemsCount = Math.Min(fullSearchResults[0].Found, 2000);
 
-            Assert.AreNotEqual(0, fullSearchResults.Count, "Данные не были полученны при поиске вакансий!");
-            Assert.AreEqual(exceptedItemsCount, totalItemsCount, "Полученны не все данные поиска!");
-            Assert.IsTrue(listHasNullItems, "Среди результатов запроса есть пустые элементы!");
+            Assert.AreNotEqual(0, fullSearchResults.Count, "Р”Р°РЅРЅС‹Рµ РЅРµ Р±С‹Р»Рё РїРѕР»СѓС‡РµРЅРЅС‹ РїСЂРё РїРѕРёСЃРєРµ РІР°РєР°РЅСЃРёР№!");
+            Assert.AreEqual(exceptedItemsCount, totalItemsCount, "РџРѕР»СѓС‡РµРЅРЅС‹ РЅРµ РІСЃРµ РґР°РЅРЅС‹Рµ РїРѕРёСЃРєР°!");
+            Assert.IsTrue(listHasNullItems, "РЎСЂРµРґРё СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ Р·Р°РїСЂРѕСЃР° РµСЃС‚СЊ РїСѓСЃС‚С‹Рµ СЌР»РµРјРµРЅС‚С‹!");
            
 
         }
