@@ -2,7 +2,7 @@
 
 namespace HHVacancy.Core.Data.Models.Vacancy
 {
-    public class Employer
+    public class EmployerEntity
     {
         [JsonPropertyName("name")]
         public string Name { get; set; }

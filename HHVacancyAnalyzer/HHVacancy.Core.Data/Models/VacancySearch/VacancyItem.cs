@@ -23,7 +23,7 @@ namespace HHVacancy.Core.Data.Models.VacancySearch
         public Department Department { get; set; }
 
         [JsonPropertyName("employer")]
-        public Employer Employer { get; set; }
+        public Vacancy.EmployerEntity Employer { get; set; }
 
         [JsonPropertyName("has_test")]
         public bool HasTest { get; set; }
