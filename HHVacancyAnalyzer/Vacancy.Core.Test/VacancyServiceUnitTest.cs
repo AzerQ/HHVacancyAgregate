@@ -7,7 +7,7 @@ namespace Vacancy.Core.Test
     [TestClass]
     public class VacancyServiceUnitTest
     {
-        private static IVacancyService _vacancyService;
+        private static IVacancyHHService _vacancyService;
 
         static VacancyServiceUnitTest()
         {
@@ -21,7 +21,7 @@ namespace Vacancy.Core.Test
                 OnlyWithSalary = true
             };
 
-        private static IVacancyService GetVacancyService() => new VacancyService();
+        private static IVacancyHHService GetVacancyService() => new VacancyHHService();
 
         /// <summary>
         /// Выбрать список случайных идентификаторов вакансий

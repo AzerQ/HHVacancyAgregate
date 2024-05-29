@@ -12,7 +12,7 @@ namespace HHVacancy.Core.Data.Services
     /// <summary>
     /// Сервис для работы с данными вакансий сайта hh.ru
     /// </summary>
-    public class VacancyService : IVacancyService
+    public class VacancyHHService : IVacancyHHService
     {
         /// <summary>
         /// Базовый адрес api HH.RU
@@ -72,7 +72,7 @@ namespace HHVacancy.Core.Data.Services
         /// <summary>
         /// Новый сервис для работы с данными вакансий сайта hh.ru
         /// </summary>
-        public VacancyService(string? baseUrl = default)
+        public VacancyHHService(string? baseUrl = default)
         {
             _baseUrl = baseUrl ?? "https://api.hh.ru";
 

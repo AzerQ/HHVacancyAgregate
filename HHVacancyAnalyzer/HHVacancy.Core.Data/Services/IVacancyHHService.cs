@@ -8,7 +8,7 @@ namespace HHVacancy.Core.Data.Services
     /// <summary>
     /// Сервис для работы с вакансиями сайта HH.RU
     /// </summary>
-    public interface IVacancyService
+    public interface IVacancyHHService
     {
         /// <summary>
         /// Получить полные данные вакансии по ее идентификатору

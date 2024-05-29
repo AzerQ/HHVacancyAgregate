@@ -7,7 +7,9 @@ namespace HHApi.App
 {
     public class TestHHApi
     {
-        IVacancyService vacancyService = new VacancyService();
+        IVacancyHHService vacancyService = new VacancyHHService();
+
+        IVacancyMappingService vacancyMappingService = new VacancyMappingService();
 
         public TestHHApi()
         {
@@ -46,6 +48,7 @@ namespace HHApi.App
             {
                 Console.WriteLine("Items on page {1} (Total items {0})", vacancyResult.Found, vacancyResult.Page);
                 fullSearchResults.AddRange(vacancyResult.Items);
+                var res = vacancyMappingService.MapFromVacancyItem(vacancyResult.Items[0]);
             }
 
             sw.Stop();
