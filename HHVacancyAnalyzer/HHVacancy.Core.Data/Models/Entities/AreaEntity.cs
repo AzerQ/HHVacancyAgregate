@@ -6,7 +6,8 @@ namespace HHVacancy.Core.Data.Models.Entities
 {
     public class AreaEntity
     {
-        public long Id { get; set; }
+        [Key]
+        public string Id { get; set; }
 
         public string Name { get; set; }
     }
