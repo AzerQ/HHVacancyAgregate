@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
+[Table("VacancyTypes")]
 public class VacacncyTypeEntity
 {
         [Key]
