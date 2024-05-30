@@ -1,7 +1,10 @@
 ﻿using HHVacancy.Core.Data.Models.Entities;
+using HHVacancy.Core.Data.Models.Vacancy;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Text.Json;
 
 namespace HHVacancy.Core.Data.Services.DB
 {
@@ -27,15 +30,29 @@ namespace HHVacancy.Core.Data.Services.DB
             Database.EnsureCreated();
         }
 
+        private string JsonSerialize(object obj) => JsonSerializer.Serialize(obj);
+
+        private T? JsonDeserialize<T>(string str) => JsonSerializer.Deserialize<T>(str);
+
+        private ValueConverter<T, string> GetJsonValueConverter<T>() =>
+            new ValueConverter<T, string>(
+                    v => JsonSerialize(v),
+                    v => JsonDeserialize<T>(v)
+            );
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            var adressJsonConverter = GetJsonValueConverter<Address>();
+            var contactsJsonConverter = GetJsonValueConverter<Contacts>();
+
             modelBuilder.Entity<VacancyEntity>()
-                .OwnsOne(vacancy => vacancy.Address,
-                builder => builder.ToJson())
-                .OwnsOne(vacancy => vacancy.Contacts,
-                builder => builder.ToJson())
-                .OwnsMany(vacancy=>vacancy.Relations,
-                builder => builder.ToJson());
+                .Property(nameof(VacancyEntity.Address))
+                .HasConversion(adressJsonConverter);
+
+            modelBuilder.Entity<VacancyEntity>()
+                .Property(nameof(VacancyEntity.Contacts))
+                .HasConversion(contactsJsonConverter);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

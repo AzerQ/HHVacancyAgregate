@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace HHVacancy.Core.Data.Models.Vacancy
 {
+    [ComplexType]
     public class Contacts
     {
         [JsonPropertyName("call_tracking_enabled")]

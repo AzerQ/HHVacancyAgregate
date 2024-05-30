@@ -17,7 +17,7 @@ namespace HHVacancy.Core.Data.Models.Entities
 
         public string AreaId { get; set; }
 
-        [ForeignKey(nameof(Area))]
+        [ForeignKey(nameof(AreaId))]
         public virtual AreaEntity Area { get; set; }
 
         public string EmployerId { get; set; }
