@@ -27,7 +27,7 @@ namespace HHVacancy.Core.Data.Models.Entities
 
         public bool HasTest { get; set; }
 
-        public virtual List<ProfessionalRoleEntity> ProfessionalRole { get; set; }
+        public virtual List<ProfessionalRoleEntity> ProfessionalRoles { get; set; }
 
         public DateTime PublishedAt { get; set; }
 
@@ -51,7 +51,7 @@ namespace HHVacancy.Core.Data.Models.Entities
         public string VacancyTypeId { get; set; }
 
         [ForeignKey(nameof(VacancyTypeId))]
-        public virtual VacacncyTypeEntity VacancyType { get; set; }
+        public virtual VacacncyTypeEntity Type { get; set; }
 
         public string Url { get; set; }
 
@@ -71,10 +71,10 @@ namespace HHVacancy.Core.Data.Models.Entities
 
         public string ResponseUrl { get; set; }
 
-        public string SheduleId { get; set; }
+        public string ScheduleId { get; set; }
 
-        [ForeignKey(nameof(SheduleId))]
-        public virtual ScheduleEntity Shedule { get; set; }
+        [ForeignKey(nameof(ScheduleId))]
+        public virtual ScheduleEntity Schedule { get; set; }
 
         public double? SortPointDistance { get; set; }
 

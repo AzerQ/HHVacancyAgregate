@@ -28,14 +28,14 @@ namespace HHApi.App
         {
             int id = 99955831;
             var model = await vacancyService.GetVacancyById(id);
-            model.DumpConsole();
+            //model.DumpConsole();
         }
 
         public async Task TestGetVacancySearchPageAsync()
         {
 
             var model = await vacancyService.GetVacancySearchPage(GetSampleRequest());
-            model.DumpConsole();
+           // model.DumpConsole();
         }
 
         public async Task TestVacancyFullSearchAsync()
@@ -49,6 +49,8 @@ namespace HHApi.App
                 Console.WriteLine("Items on page {1} (Total items {0})", vacancyResult.Found, vacancyResult.Page);
                 fullSearchResults.AddRange(vacancyResult.Items);
                 var res = vacancyMappingService.MapFromVacancyItem(vacancyResult.Items[0]);
+                vacancyResult.Items[0].DumpConsole();
+                res.DumpConsole();
             }
 
             sw.Stop();
