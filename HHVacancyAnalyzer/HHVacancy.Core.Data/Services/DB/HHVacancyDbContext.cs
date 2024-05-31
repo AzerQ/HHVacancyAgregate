@@ -14,13 +14,15 @@ namespace HHVacancy.Core.Data.Services.DB
 
         public DbSet<EmployerEntity> Employers { get; set; }
 
+        public DbSet<EmploymentEntity> Employments { get; set; }
+
         public DbSet<ExperienceEntity> Experiences { get; set; }
 
         public DbSet<ProfessionalRoleEntity> ProfessionalRoles { get; set; }
 
         public DbSet<ScheduleEntity> Schedules { get; set; }
 
-        public DbSet<VacacncyTypeEntity> VacacncyTypes { get; set; }
+        public DbSet<VacancyTypeEntity> VacacncyTypes { get; set; }
 
         public DbSet<VacancyEntity> Vacancies { get; set; }
 

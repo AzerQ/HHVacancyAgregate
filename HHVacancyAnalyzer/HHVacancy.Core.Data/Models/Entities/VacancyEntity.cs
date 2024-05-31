@@ -51,7 +51,7 @@ namespace HHVacancy.Core.Data.Models.Entities
         public string VacancyTypeId { get; set; }
 
         [ForeignKey(nameof(VacancyTypeId))]
-        public virtual VacacncyTypeEntity Type { get; set; }
+        public virtual VacancyTypeEntity Type { get; set; }
 
         public string Url { get; set; }
 

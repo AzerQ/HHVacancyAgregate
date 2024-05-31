@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("VacancyTypes")]
-public class VacacncyTypeEntity
+public class VacancyTypeEntity
 {
         [Key]
         [Column("VacancyTypeId")]
