@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using HHVacancy.Core.Data.Models.Entities;
 
-namespace HHVacancy.Core.Data;
+namespace HHVacancy.Core.Data.Services.DB;
 
 public interface IVacancyDbService
 {
@@ -17,7 +17,7 @@ public interface IVacancyDbService
 
     Task AddOrUpdateSchedules(params ScheduleEntity[] schedules);
 
-    Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntity);
+    Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities);
 
     Task AddOrUpdateVacancies(params VacancyEntity[] vacancies);
 }

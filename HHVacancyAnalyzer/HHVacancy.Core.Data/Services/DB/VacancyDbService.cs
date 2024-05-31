@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using HHVacancy.Core.Data.Models.Entities;
-using HHVacancy.Core.Data.Services.DB;
-using Microsoft.EntityFrameworkCore;
 
-namespace HHVacancy.Core.Data;
+
+namespace HHVacancy.Core.Data.Services.DB;
 
 public class VacancyDbService : IVacancyDbService
 {
@@ -15,41 +14,41 @@ public class VacancyDbService : IVacancyDbService
 
     public async Task AddOrUpdateAreas(params AreaEntity[] areas)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.Areas.AddOrUpdateRangeAsync(areas);
     }
 
     public async Task AddOrUpdateEmployers(params EmployerEntity[] employers)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.Employers.AddOrUpdateRangeAsync(employers);
     }
 
     public async Task AddOrUpdateEmployments(params EmploymentEntity[] employments)
     {
-       throw new System.NotImplementedException();
+       await _vacancyDbContext.Employments.AddOrUpdateRangeAsync(employments);
     }
 
     public async Task AddOrUpdateExperienceItems(params ExperienceEntity[] experienceItems)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.Experiences.AddOrUpdateRangeAsync(experienceItems);
     }
 
     public async Task AddOrUpdateProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles)
     {
-        throw new System.NotImplementedException();
+          await _vacancyDbContext.ProfessionalRoles.AddOrUpdateRangeAsync(professionalRoles);
     }
 
     public async Task AddOrUpdateSchedules(params ScheduleEntity[] schedules)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.Schedules.AddOrUpdateRangeAsync(schedules);
     }
 
     public async Task AddOrUpdateVacancies(params VacancyEntity[] vacancies)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.Vacancies.AddOrUpdateRangeAsync(vacancies);
     }
 
-    public async Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntity)
+    public async Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
     {
-        throw new System.NotImplementedException();
+        await _vacancyDbContext.VacacncyTypes.AddOrUpdateRangeAsync(vacacncyTypeEntitities);
     }
 }

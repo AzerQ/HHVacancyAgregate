@@ -6,8 +6,8 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Json;
 
-namespace HHVacancy.Core.Data.Services.DB
-{
+namespace HHVacancy.Core.Data.Services.DB;
+
     public class HHVacancyDbContext : DbContext
     {
         public DbSet<AreaEntity> Areas { get; set; }
@@ -29,6 +29,7 @@ namespace HHVacancy.Core.Data.Services.DB
 
         public HHVacancyDbContext() : base()
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -67,4 +68,4 @@ namespace HHVacancy.Core.Data.Services.DB
 
         }
     }
-}
+

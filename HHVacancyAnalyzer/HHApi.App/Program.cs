@@ -52,10 +52,11 @@ namespace HHApi.App
                 {
                     Console.WriteLine("Items on page {1} (Total items {0})", vacancyResult.Found, vacancyResult.Page);
                     fullSearchResults.AddRange(vacancyResult.Items);
-                    var dbEntites = vacancyResult.Items.Select(vacancyMappingService.MapFromVacancyItem);
-                    await db.AddRangeAsync(dbEntites);
-                    await db.SaveChangesAsync();
+                    
                 }
+
+                var dbEntites = fullSearchResults.Select(vacancyMappingService.MapFromVacancyItem);
+                await db.Vacancies.AddRangeAsync(dbEntites);
 
                 sw.Stop();
                 sw.Elapsed.DumpConsole();
