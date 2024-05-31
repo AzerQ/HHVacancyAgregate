@@ -13,7 +13,7 @@ namespace HHApi.App
 
         IVacancyMappingService vacancyMappingService = new VacancyMappingService();
 
-        IVacancyDbService vacancyDbService = new VacancyDbService(new HHVacancyDbContext());
+        IVacancyDbService vacancyDbService = new VacancyDbService();
 
         public TestHHApi()
         {
