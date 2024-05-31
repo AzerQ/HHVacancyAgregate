@@ -1,47 +1,60 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HHVacancy.Core.Data.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace HHVacancy.Core.Data.Services.DB;
 
 public class VacancyDbService : IVacancyDbService
 {
-    private readonly HHVacancyDbContext _vacancyDbContext;
-    public VacancyDbService(HHVacancyDbContext vacancyDbContext)
+
+    public VacancyDbService()
     {
-        _vacancyDbContext = vacancyDbContext;
+
     }
 
+    private async Task InsertEntites<TEntity, TKey>(Func<HHVacancyDbContext, DbSet<TEntity>> dbSetGetter,
+    IEnumerable<TEntity> entities, Func<TEntity, TKey> keySelector) where TEntity : class
+    {
+        using (var db = new HHVacancyDbContext())
+        {
+            var dbSet = dbSetGetter(db);
+            await dbSet.AddRangeIfNotExists(entities, keySelector);
+            await db.SaveChangesAsync();
+        }
+    }
 
     public async Task InsertAreas(params AreaEntity[] areas)
     {
-        await _vacancyDbContext.Areas.AddRangeIfNotExists(areas, area => area.Id);
+        await InsertEntites(db => db.Areas, areas, area => area.Id);
     }
 
     public async Task InsertEmployers(params EmployerEntity[] employers)
     {
-        await _vacancyDbContext.Employers.AddRangeIfNotExists(employers, employer=> employer.Id);
+        await InsertEntites(db => db.Employers, employers, employer => employer.Id);
     }
 
     public async Task InsertEmployments(params EmploymentEntity[] employments)
     {
-        await _vacancyDbContext.Employments.AddRangeIfNotExists(employments, employement => employement.Id);
+        await InsertEntites(db => db.Employments, employments, employement => employement.Id);
     }
 
     public async Task InsertExperienceItems(params ExperienceEntity[] experienceItems)
     {
-        await _vacancyDbContext.Experiences.AddRangeIfNotExists(experienceItems, experience => experience.Id);
+        await InsertEntites(db => db.Experiences, experienceItems, experience => experience.Id);
     }
 
     public async Task InsertProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles)
     {
-        await _vacancyDbContext.ProfessionalRoles.AddRangeIfNotExists(professionalRoles, professionalRole => professionalRole.Id);
+        await InsertEntites(db => db.ProfessionalRoles, professionalRoles, professionalRole => professionalRole.Id);
     }
 
     public async Task InsertSchedules(params ScheduleEntity[] schedules)
     {
-        await _vacancyDbContext.Schedules.AddRangeIfNotExists(schedules, schedule => schedule.Id);
+        await InsertEntites(db => db.Schedules, schedules, schedule => schedule.Id);
     }
     private void ClearVacancyLinkedObjects(VacancyEntity vacancy)
     {
@@ -84,14 +97,14 @@ public class VacancyDbService : IVacancyDbService
         {
             ClearVacancyLinkedObjects(vacancy);
         }
-        await _vacancyDbContext.Vacancies.AddRangeIfNotExists(vacancies, vacancy => vacancy.Id);
+
+        await InsertEntites(db => db.Vacancies, vacancies, vacancy => vacancy.Id);
 
     }
 
     public async Task InsertVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
     {
-        await _vacancyDbContext.VacacncyTypes.AddRangeIfNotExists(vacacncyTypeEntitities, vacacnyType => vacacnyType.Id);
+        await InsertEntites(db => db.VacacncyTypes, vacacncyTypeEntitities, vacacnyType => vacacnyType.Id);
     }
 
-    public async Task SaveChanges() => await _vacancyDbContext.SaveChangesAsync();
 }

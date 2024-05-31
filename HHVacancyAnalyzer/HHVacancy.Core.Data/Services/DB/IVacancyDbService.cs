@@ -21,6 +21,4 @@ public interface IVacancyDbService
 
     Task InsertVacancies(params VacancyEntity[] vacancies);
 
-    Task SaveChanges();
-
 }
