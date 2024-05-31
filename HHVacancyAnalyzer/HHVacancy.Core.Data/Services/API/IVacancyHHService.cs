@@ -3,8 +3,8 @@ using HHVacancy.Core.Data.Models.VacancySearch;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace HHVacancy.Core.Data.Services
-{
+namespace HHVacancy.Core.Data.Services.API;
+
     /// <summary>
     /// Сервис для работы с вакансиями сайта HH.RU
     /// </summary>
@@ -34,4 +34,3 @@ namespace HHVacancy.Core.Data.Services
         /// <returns>Асинхронный поток данных поисковых страниц вакансий</returns>
         IAsyncEnumerable<VacancySearchResult> SearchVacancies (VacancySearchRequest searchVacancySearchRequest);
     }
-}

@@ -3,8 +3,8 @@ using HHVacancy.Core.Data.Converters;
 using System.IO;
 using System.Text.Json;
 
-namespace HHVacancy.Core.Data.Services
-{
+namespace HHVacancy.Core.Services.DataConverters;
+
     internal class CorrectDateSerializer : ISerializer
     {
         private readonly JsonSerializerOptions _options;
@@ -30,4 +30,4 @@ namespace HHVacancy.Core.Data.Services
         public string Serialize(object obj) => JsonSerializer.Serialize(obj, _options);
       
     }
-}
+

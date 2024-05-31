@@ -1,6 +1,6 @@
 using VacancyFullModel = HHVacancy.Core.Data.Models.Vacancy.Vacancy;
 using HHVacancy.Core.Data.Models.VacancySearch;
-using HHVacancy.Core.Data.Services;
+using HHVacancy.Core.Data.Services.API;
 
 namespace Vacancy.Core.Test
 {

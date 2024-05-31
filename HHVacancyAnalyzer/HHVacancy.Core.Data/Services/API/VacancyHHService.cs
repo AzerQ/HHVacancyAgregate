@@ -2,13 +2,14 @@
 using Flurl.Http;
 using HHVacancy.Core.Data.Models.Vacancy;
 using HHVacancy.Core.Data.Models.VacancySearch;
+using HHVacancy.Core.Services.DataConverters;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace HHVacancy.Core.Data.Services
-{
+namespace HHVacancy.Core.Data.Services.API;
+
     /// <summary>
     /// Сервис для работы с данными вакансий сайта hh.ru
     /// </summary>
@@ -138,4 +139,4 @@ namespace HHVacancy.Core.Data.Services
             }
         }
     }
-}
+

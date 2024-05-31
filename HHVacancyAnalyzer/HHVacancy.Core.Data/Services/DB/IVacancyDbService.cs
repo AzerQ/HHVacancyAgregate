@@ -20,4 +20,7 @@ public interface IVacancyDbService
     Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities);
 
     Task AddOrUpdateVacancies(params VacancyEntity[] vacancies);
+
+    Task SaveChanges();
+
 }

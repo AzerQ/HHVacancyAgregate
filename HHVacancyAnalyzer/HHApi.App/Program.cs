@@ -1,7 +1,8 @@
 ﻿using Dumpify;
 using HHVacancy.Core.Data.Models.VacancySearch;
-using HHVacancy.Core.Data.Services;
+using HHVacancy.Core.Data.Services.API;
 using HHVacancy.Core.Data.Services.DB;
+using HHVacancy.Core.Services.DataConverters;
 using System.Diagnostics;
 
 namespace HHApi.App
@@ -12,6 +13,8 @@ namespace HHApi.App
 
         IVacancyMappingService vacancyMappingService = new VacancyMappingService();
 
+        IVacancyDbService vacancyDbService = new VacancyDbService(new HHVacancyDbContext());
+
         public TestHHApi()
         {
         }
@@ -20,7 +23,7 @@ namespace HHApi.App
         private VacancySearchRequest GetSampleRequest() =>
             new VacancySearchRequest
             {
-                Text = "C# разработчик удаленно",
+                Text = "C# разработчик",
                 OnlyWithSalary = true
             };
 
@@ -41,8 +44,7 @@ namespace HHApi.App
 
         public async Task TestVacancyFullSearchAsync()
         {
-            using (var db = new HHVacancyDbContext())
-            {
+
 
                 var fullSearchResults = new List<VacancyItem>(1000);
 
@@ -56,11 +58,10 @@ namespace HHApi.App
                 }
 
                 var dbEntites = fullSearchResults.Select(vacancyMappingService.MapFromVacancyItem);
-                await db.Vacancies.AddRangeAsync(dbEntites);
+                await vacancyDbService.AddOrUpdateVacancies(dbEntites.ToArray());
 
                 sw.Stop();
                 sw.Elapsed.DumpConsole();
-            }
         }
     }
 

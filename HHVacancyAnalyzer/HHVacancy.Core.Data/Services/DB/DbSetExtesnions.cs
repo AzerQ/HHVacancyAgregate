@@ -9,6 +9,8 @@ namespace HHVacancy.Core.Data.Services.DB;
 
 public static class DbSetExtesnions
 {
+    private static IEnumerable<TKeyType> GetExistingKeys<TKeyType>(IEnumerable<TKeyType> keys, )
+
      public static async Task AddOrUpdateRangeAsync<TEntity>(this DbSet<TEntity> dbSet, IEnumerable<TEntity> entities) where TEntity : class
     {
         var context = dbSet.GetService<ICurrentDbContext>().Context;

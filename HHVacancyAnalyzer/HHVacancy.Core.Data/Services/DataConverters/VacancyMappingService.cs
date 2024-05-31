@@ -2,8 +2,8 @@
 using HHVacancy.Core.Data.Models.VacancySearch;
 using Mapster;
 
-namespace HHVacancy.Core.Data.Services
-{
+namespace HHVacancy.Core.Services.DataConverters;
+
     public class VacancyMappingService : IVacancyMappingService
     {
         public VacancyEntity MapFromVacancyItem(VacancyItem vacancyItem)
@@ -11,4 +11,4 @@ namespace HHVacancy.Core.Data.Services
             return vacancyItem.Adapt<VacancyEntity>();
         }
     }
-}
+
