@@ -4,13 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 [Table("Employers")]
 public class EmployerEntity
     {
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         public bool Trusted { get; set; }
 
         public bool AccreditedItEmployer { get; set; }
 
-        public string AlternateUrl { get; set; }
+        public string? AlternateUrl { get; set; }
 
         [Key]
         [Column("EmployerId")]

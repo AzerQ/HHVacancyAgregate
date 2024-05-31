@@ -11,16 +11,16 @@ namespace HHVacancy.Core.Data.Models.Entities
     {
         [Key]
         [Column("VacancyId")]
-        public string Id { get; set; }
+        public string? Id { get; set; }
 
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        public string AreaId { get; set; }
+        public string? AreaId { get; set; }
 
         [ForeignKey(nameof(AreaId))]
         public virtual AreaEntity Area { get; set; }
 
-        public string EmployerId { get; set; }
+        public string? EmployerId { get; set; }
 
         [ForeignKey(nameof(EmployerId))]
         public virtual EmployerEntity Employer { get; set; }
@@ -32,11 +32,11 @@ namespace HHVacancy.Core.Data.Models.Entities
         public DateTime PublishedAt { get; set; }
 
         // JSON SERIALIZED
-        public List<string> Relations { get; set; }
+        public List<string?> Relations { get; set; }
 
         public bool ResponseLetterRequired { get; set; }
 
-        public string SalaryCurrency { get; set; }
+        public string? SalaryCurrency { get; set; }
 
         public int? SalaryFrom { get; set; }
 
@@ -44,23 +44,23 @@ namespace HHVacancy.Core.Data.Models.Entities
 
         public bool? SalaryGross { get; set; }
 
-        public string SnippetRequirement { get; set; }
+        public string? SnippetRequirement { get; set; }
 
-        public string SinppetResponsibility { get; set; }
+        public string? SinppetResponsibility { get; set; }
 
-        public string VacancyTypeId { get; set; }
+        public string? VacancyTypeId { get; set; }
 
         [ForeignKey(nameof(VacancyTypeId))]
         public virtual VacancyTypeEntity Type { get; set; }
 
-        public string Url { get; set; }
+        public string? Url { get; set; }
 
         public bool AcceptTemporary { get; set; }
 
         // JSON SERIALIZED
         public Address Address { get; set; }
 
-        public string AdvResponseUrl { get; set; }
+        public string? AdvResponseUrl { get; set; }
 
         public bool Archived { get; set; }
 
@@ -69,21 +69,21 @@ namespace HHVacancy.Core.Data.Models.Entities
 
         public DateTime CreatedAt { get; set; }
 
-        public string ResponseUrl { get; set; }
+        public string? ResponseUrl { get; set; }
 
-        public string ScheduleId { get; set; }
+        public string? ScheduleId { get; set; }
 
         [ForeignKey(nameof(ScheduleId))]
         public virtual ScheduleEntity Schedule { get; set; }
 
         public double? SortPointDistance { get; set; }
 
-        public string EmploymentId { get; set; }
+        public string? EmploymentId { get; set; }
 
         [ForeignKey(nameof(EmploymentId))]
         public EmploymentEntity Employment { get; set; }
 
-        public string ExperienceId { get; set; }
+        public string? ExperienceId { get; set; }
 
         [ForeignKey(nameof(ExperienceId))]
         public ExperienceEntity Experience { get; set; }
