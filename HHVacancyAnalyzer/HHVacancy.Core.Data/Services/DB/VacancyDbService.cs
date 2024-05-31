@@ -14,34 +14,34 @@ public class VacancyDbService : IVacancyDbService
     }
 
 
-    public async Task AddOrUpdateAreas(params AreaEntity[] areas)
+    public async Task InsertAreas(params AreaEntity[] areas)
     {
-        await _vacancyDbContext.Areas.AddOrUpdateRangeAsync(areas);
+        await _vacancyDbContext.Areas.AddRangeIfNotExists(areas, area => area.Id);
     }
 
-    public async Task AddOrUpdateEmployers(params EmployerEntity[] employers)
+    public async Task InsertEmployers(params EmployerEntity[] employers)
     {
-        await _vacancyDbContext.Employers.AddOrUpdateRangeAsync(employers);
+        await _vacancyDbContext.Employers.AddRangeIfNotExists(employers, employer=> employer.Id);
     }
 
-    public async Task AddOrUpdateEmployments(params EmploymentEntity[] employments)
+    public async Task InsertEmployments(params EmploymentEntity[] employments)
     {
-        await _vacancyDbContext.Employments.AddOrUpdateRangeAsync(employments);
+        await _vacancyDbContext.Employments.AddRangeIfNotExists(employments, employement => employement.Id);
     }
 
-    public async Task AddOrUpdateExperienceItems(params ExperienceEntity[] experienceItems)
+    public async Task InsertExperienceItems(params ExperienceEntity[] experienceItems)
     {
-        await _vacancyDbContext.Experiences.AddOrUpdateRangeAsync(experienceItems);
+        await _vacancyDbContext.Experiences.AddRangeIfNotExists(experienceItems, experience => experience.Id);
     }
 
-    public async Task AddOrUpdateProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles)
+    public async Task InsertProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles)
     {
-        await _vacancyDbContext.ProfessionalRoles.AddOrUpdateRangeAsync(professionalRoles);
+        await _vacancyDbContext.ProfessionalRoles.AddRangeIfNotExists(professionalRoles, professionalRole => professionalRole.Id);
     }
 
-    public async Task AddOrUpdateSchedules(params ScheduleEntity[] schedules)
+    public async Task InsertSchedules(params ScheduleEntity[] schedules)
     {
-        await _vacancyDbContext.Schedules.AddOrUpdateRangeAsync(schedules);
+        await _vacancyDbContext.Schedules.AddRangeIfNotExists(schedules, schedule => schedule.Id);
     }
     private void ClearVacancyLinkedObjects(VacancyEntity vacancy)
     {
@@ -57,40 +57,40 @@ public class VacancyDbService : IVacancyDbService
 
     }
 
-    public async Task AddOrUpdateVacancies(params VacancyEntity[] vacancies)
+    public async Task InsertVacancies(params VacancyEntity[] vacancies)
     {
         var areas = vacancies.Select(vacancy => vacancy.Area).DistinctBy(area => area.Id);
-        await AddOrUpdateAreas(areas.ToArray());
+        await InsertAreas(areas.ToArray());
 
         var employers = vacancies.Select(vacancy => vacancy.Employer).DistinctBy(employer => employer.Id);
-        await AddOrUpdateEmployers(employers.ToArray());
+        await InsertEmployers(employers.ToArray());
 
         var employments = vacancies.Select(vacancy => vacancy.Employment).DistinctBy(employement => employement.Id);
-        await AddOrUpdateEmployments(employments.ToArray());
+        await InsertEmployments(employments.ToArray());
 
         var experienceItems = vacancies.Select(vacancy => vacancy.Experience).DistinctBy(experience => experience.Id);
-        await AddOrUpdateExperienceItems(experienceItems.ToArray());
+        await InsertExperienceItems(experienceItems.ToArray());
 
         var professionalRoles = vacancies.SelectMany(vacancy => vacancy.ProfessionalRoles).DistinctBy(professionalRole => professionalRole.Id);
-        await AddOrUpdateProfessionalRoles(professionalRoles.ToArray());
+        await InsertProfessionalRoles(professionalRoles.ToArray());
 
         var schedules = vacancies.Select(vacancy => vacancy.Schedule).DistinctBy(schedule => schedule.Id);
-        await AddOrUpdateSchedules(schedules.ToArray());
+        await InsertSchedules(schedules.ToArray());
 
         var vacancyTypes = vacancies.Select(vacancy => vacancy.Type).DistinctBy(vacancyType => vacancyType.Id);
-        await AddOrUpdateSchedules(schedules.ToArray());
+        await InsertSchedules(schedules.ToArray());
 
         foreach (var vacancy in vacancies)
         {
             ClearVacancyLinkedObjects(vacancy);
         }
-        await _vacancyDbContext.Vacancies.AddOrUpdateRangeAsync(vacancies);
+        await _vacancyDbContext.Vacancies.AddRangeIfNotExists(vacancies, vacancy => vacancy.Id);
 
     }
 
-    public async Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
+    public async Task InsertVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
     {
-        await _vacancyDbContext.VacacncyTypes.AddOrUpdateRangeAsync(vacacncyTypeEntitities);
+        await _vacancyDbContext.VacacncyTypes.AddRangeIfNotExists(vacacncyTypeEntitities, vacacnyType => vacacnyType.Id);
     }
 
     public async Task SaveChanges() => await _vacancyDbContext.SaveChangesAsync();

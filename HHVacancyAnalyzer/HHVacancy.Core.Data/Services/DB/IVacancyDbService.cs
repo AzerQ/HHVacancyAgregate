@@ -5,21 +5,21 @@ namespace HHVacancy.Core.Data.Services.DB;
 
 public interface IVacancyDbService
 {
-    Task AddOrUpdateAreas(params AreaEntity[] areas);
+    Task InsertAreas(params AreaEntity[] areas);
 
-    Task AddOrUpdateEmployers(params EmployerEntity[] employers);
+    Task InsertEmployers(params EmployerEntity[] employers);
 
-    Task AddOrUpdateEmployments(params EmploymentEntity[] employments);
+    Task InsertEmployments(params EmploymentEntity[] employments);
 
-    Task AddOrUpdateExperienceItems(params ExperienceEntity[] experienceItems);
+    Task InsertExperienceItems(params ExperienceEntity[] experienceItems);
 
-    Task AddOrUpdateProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles);
+    Task InsertProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles);
 
-    Task AddOrUpdateSchedules(params ScheduleEntity[] schedules);
+    Task InsertSchedules(params ScheduleEntity[] schedules);
 
-    Task AddOrUpdateVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities);
+    Task InsertVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities);
 
-    Task AddOrUpdateVacancies(params VacancyEntity[] vacancies);
+    Task InsertVacancies(params VacancyEntity[] vacancies);
 
     Task SaveChanges();
 

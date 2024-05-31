@@ -58,7 +58,8 @@ namespace HHApi.App
                 }
 
                 var dbEntites = fullSearchResults.Select(vacancyMappingService.MapFromVacancyItem);
-                await vacancyDbService.AddOrUpdateVacancies(dbEntites.ToArray());
+                await vacancyDbService.InsertVacancies(dbEntites.ToArray());
+                await vacancyDbService.SaveChanges();
 
                 sw.Stop();
                 sw.Elapsed.DumpConsole();
