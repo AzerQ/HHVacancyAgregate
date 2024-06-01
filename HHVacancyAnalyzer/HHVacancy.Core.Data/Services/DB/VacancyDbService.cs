@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HHVacancy.Core.Data.Models.Entities;
+using HHVacancy.Core.Data.Services.DataConverters;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -19,10 +20,12 @@ public class VacancyDbService : IVacancyDbService
     private async Task InsertEntites<TEntity, TKey>(Func<HHVacancyDbContext, DbSet<TEntity>> dbSetGetter,
     IEnumerable<TEntity> entities, Func<TEntity, TKey> keySelector) where TEntity : class
     {
-        using (var db = new HHVacancyDbContext())
+        var distinctById = entities.DistinctBy(keySelector);
+
+        using (var db = new HHVacancyDbContext(new JsonDbSerializer()))
         {
             var dbSet = dbSetGetter(db);
-            await dbSet.AddRangeIfNotExists(entities, keySelector);
+            await dbSet.AddRangeIfNotExists(distinctById, keySelector);
             await db.SaveChangesAsync();
         }
     }
@@ -56,6 +59,12 @@ public class VacancyDbService : IVacancyDbService
     {
         await InsertEntites(db => db.Schedules, schedules, schedule => schedule.Id);
     }
+
+    public async Task InsertVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
+    {
+        await InsertEntites(db => db.VacacncyTypes, vacacncyTypeEntitities, vacacnyType => vacacnyType.Id);
+    }
+
     private void ClearVacancyLinkedObjects(VacancyEntity vacancy)
     {
         // Чистим ссылки для нормльного сохранения в контексте объектов (Для избежания дубликтов)
@@ -67,31 +76,30 @@ public class VacancyDbService : IVacancyDbService
         vacancy.ProfessionalRoles = null;
         vacancy.Schedule = null;
         vacancy.Type = null;
-
     }
 
     public async Task InsertVacancies(params VacancyEntity[] vacancies)
     {
-        var areas = vacancies.Select(vacancy => vacancy.Area).DistinctBy(area => area.Id);
+        IEnumerable<AreaEntity> areas = vacancies.Select(vacancy => vacancy.Area);
         await InsertAreas(areas.ToArray());
 
-        var employers = vacancies.Select(vacancy => vacancy.Employer).DistinctBy(employer => employer.Id);
+        IEnumerable<EmployerEntity> employers = vacancies.Select(vacancy => vacancy.Employer);
         await InsertEmployers(employers.ToArray());
 
-        var employments = vacancies.Select(vacancy => vacancy.Employment).DistinctBy(employement => employement.Id);
+        IEnumerable<EmploymentEntity> employments = vacancies.Select(vacancy => vacancy.Employment);
         await InsertEmployments(employments.ToArray());
 
-        var experienceItems = vacancies.Select(vacancy => vacancy.Experience).DistinctBy(experience => experience.Id);
+        IEnumerable<ExperienceEntity> experienceItems = vacancies.Select(vacancy => vacancy.Experience);
         await InsertExperienceItems(experienceItems.ToArray());
 
-        var professionalRoles = vacancies.SelectMany(vacancy => vacancy.ProfessionalRoles).DistinctBy(professionalRole => professionalRole.Id);
+        IEnumerable<ProfessionalRoleEntity> professionalRoles = vacancies.SelectMany(vacancy => vacancy.ProfessionalRoles);
         await InsertProfessionalRoles(professionalRoles.ToArray());
 
-        var schedules = vacancies.Select(vacancy => vacancy.Schedule).DistinctBy(schedule => schedule.Id);
+        IEnumerable<ScheduleEntity> schedules = vacancies.Select(vacancy => vacancy.Schedule);
         await InsertSchedules(schedules.ToArray());
 
-        var vacancyTypes = vacancies.Select(vacancy => vacancy.Type).DistinctBy(vacancyType => vacancyType.Id);
-        await InsertSchedules(schedules.ToArray());
+        IEnumerable<VacancyTypeEntity> vacancyTypes = vacancies.Select(vacancy => vacancy.Type);
+        await InsertVacancyTypes(vacancyTypes.ToArray());
 
         foreach (var vacancy in vacancies)
         {
@@ -100,11 +108,6 @@ public class VacancyDbService : IVacancyDbService
 
         await InsertEntites(db => db.Vacancies, vacancies, vacancy => vacancy.Id);
 
-    }
-
-    public async Task InsertVacancyTypes(params VacancyTypeEntity[] vacacncyTypeEntitities)
-    {
-        await InsertEntites(db => db.VacacncyTypes, vacacncyTypeEntitities, vacacnyType => vacacnyType.Id);
     }
 
 }

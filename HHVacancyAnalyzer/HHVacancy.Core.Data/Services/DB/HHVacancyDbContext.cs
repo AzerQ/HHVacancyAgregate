@@ -1,10 +1,9 @@
 ﻿using HHVacancy.Core.Data.Models.Entities;
 using HHVacancy.Core.Data.Models.Vacancy;
+using HHVacancy.Core.Data.Services.DataConverters;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Text.Json;
 
 namespace HHVacancy.Core.Data.Services.DB;
 
@@ -26,27 +25,22 @@ public class HHVacancyDbContext : DbContext
 
     public DbSet<VacancyEntity> Vacancies { get; set; }
 
+    private readonly IJsonDbSrializer _jsonDb;
 
-    public HHVacancyDbContext() : base()
+    public HHVacancyDbContext(IJsonDbSrializer jsonDbSrializer) : base()
     {
+        _jsonDb = jsonDbSrializer;
         Database.EnsureCreated();
     }
 
-    private string JsonSerialize(object obj) => JsonSerializer.Serialize(obj);
 
-    private T? JsonDeserialize<T>(string str) => JsonSerializer.Deserialize<T>(str);
 
-    private ValueConverter<T, string> GetJsonValueConverter<T>() =>
-        new ValueConverter<T, string>(
-                v => JsonSerialize(v),
-                v => JsonDeserialize<T>(v)
-        );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        var adressJsonConverter = GetJsonValueConverter<Address>();
-        var contactsJsonConverter = GetJsonValueConverter<Contacts>();
+        var adressJsonConverter = _jsonDb.GetJsonValueConverter<Address>();
+        var contactsJsonConverter = _jsonDb.GetJsonValueConverter<Contacts>();
 
         modelBuilder.Entity<VacancyEntity>()
             .Property(nameof(VacancyEntity.Address))
@@ -67,8 +61,6 @@ public class HHVacancyDbContext : DbContext
         optionsBuilder.UseSqlite(connectionString)
                       .LogTo(Console.WriteLine, (_, level) => level == LogLevel.Information)
                       .EnableSensitiveDataLogging();
-
-        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
     }
 }
 
