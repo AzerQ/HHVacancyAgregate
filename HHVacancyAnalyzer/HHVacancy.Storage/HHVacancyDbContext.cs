@@ -2,8 +2,7 @@
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Storage.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using EmployerEntity = HHVacancy.Models.DB.Entities.EmployerEntity;
+
 
 
 namespace HHVacancy.Storage;

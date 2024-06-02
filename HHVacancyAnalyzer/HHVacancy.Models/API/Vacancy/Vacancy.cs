@@ -95,7 +95,7 @@ namespace HHVacancy.Models.API.Vacancy
         public Department Department { get; set; }
 
         [JsonPropertyName("employer")]
-        public EmployerEntity Employer { get; set; }
+        public Employer Employer { get; set; }
 
         [JsonPropertyName("employment")]
         public Employment Employment { get; set; }
