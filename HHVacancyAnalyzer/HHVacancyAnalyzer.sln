@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HHVacancy.Core", "HHVacancy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HHVacancy.ConsoleApp", "HHVacancy.ConsoleApp\HHVacancy.ConsoleApp.csproj", "{8910C111-E597-47A3-BA0C-D5BA1A6B011E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vacancy.Core.Test", "HHVacancy.Core.Test\Vacancy.Core.Test.csproj", "{8F7BD45D-746B-4B2C-9A46-5BB9C994B24C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HHVacancy.Core.Test", "HHVacancy.Core.Test\HHVacancy.Core.Test.csproj", "{EA21D512-44D0-4677-A571-D1C4ADB2D372}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{8910C111-E597-47A3-BA0C-D5BA1A6B011E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8910C111-E597-47A3-BA0C-D5BA1A6B011E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8910C111-E597-47A3-BA0C-D5BA1A6B011E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F7BD45D-746B-4B2C-9A46-5BB9C994B24C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F7BD45D-746B-4B2C-9A46-5BB9C994B24C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F7BD45D-746B-4B2C-9A46-5BB9C994B24C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F7BD45D-746B-4B2C-9A46-5BB9C994B24C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA21D512-44D0-4677-A571-D1C4ADB2D372}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA21D512-44D0-4677-A571-D1C4ADB2D372}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA21D512-44D0-4677-A571-D1C4ADB2D372}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA21D512-44D0-4677-A571-D1C4ADB2D372}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
