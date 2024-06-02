@@ -29,9 +29,6 @@ public class VacancyEntity
 
     public DateTime PublishedAt { get; set; }
 
-    // JSON SERIALIZED
-    public List<string?> Relations { get; set; }
-
     public bool ResponseLetterRequired { get; set; }
 
     public string? SalaryCurrency { get; set; }
@@ -44,7 +41,7 @@ public class VacancyEntity
 
     public string? SnippetRequirement { get; set; }
 
-    public string? SinppetResponsibility { get; set; }
+    public string? SnippetResponsibility { get; set; }
 
     public string? VacancyTypeId { get; set; }
 
