@@ -1,6 +1,7 @@
 {
-    "name": "C# Dev Container",
-    "image": "mcr.microsoft.com/devcontainers/dotnet:8.0",
+    "name": "Node.js and C# Dev Container",
+    "dockerFile": "Dockerfile",
+    "context": "..",
     "customizations": {
         "vscode": {
             "extensions": [
@@ -9,11 +10,15 @@
                 "ms-dotnettools.vscode-dotnet-runtime",
                 "Gruntfuggly.todo-tree",
                 "jmazouri.sharppad"
-            ]
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
         }
     },
     "remoteEnv": {
         "HHAPITOKEN": "${{secrets.HHAPITOKEN}}"
     },
-    "postCreateCommand": "dotnet restore"
+    "postCreateCommand": "dotnet restore",
+    "remoteUser": "vscode"
 }
