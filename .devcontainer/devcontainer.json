@@ -19,6 +19,5 @@
     "remoteEnv": {
         "HHAPITOKEN": "${{secrets.HHAPITOKEN}}"
     },
-    "postCreateCommand": "dotnet restore",
-    "remoteUser": "vscode"
+    "postCreateCommand": "dotnet restore"
 }
