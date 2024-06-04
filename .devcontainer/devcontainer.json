@@ -9,7 +9,8 @@
                 "ms-dotnettools.csdevkit",
                 "ms-dotnettools.vscode-dotnet-runtime",
                 "Gruntfuggly.todo-tree",
-                "jmazouri.sharppad"
+                "mtxr.sqltools",
+                "mtxr.sqltools-driver-sqlite"
             ],
             "settings": {
                 "terminal.integrated.defaultProfile.linux": "bash"
