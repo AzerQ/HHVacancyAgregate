@@ -12,7 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Устанавливаем NPM пакет для подключения к SQL Lite
-RUN npm install sqlite3@5.1.1 && exit 0
+RUN npm install -g sqlite3@5.1.1 && exit 0
 
 # Устанавливаем .NET CLI инструменты
 RUN dotnet tool install --global dotnet-ef
