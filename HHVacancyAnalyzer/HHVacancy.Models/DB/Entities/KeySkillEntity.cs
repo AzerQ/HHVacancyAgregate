@@ -8,7 +8,7 @@ namespace HHVacancy.Models.DB.Entities
     public class KeySkillEntity
     {
         [Key]
-        [Column("KeySkill")]
+        [Column("KeySkillId")]
         public string Id { get; set; }
 
         public string Name { get; set; }

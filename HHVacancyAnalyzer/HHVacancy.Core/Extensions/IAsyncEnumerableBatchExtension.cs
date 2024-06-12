@@ -1,4 +1,4 @@
-﻿namespace HHVacancy.Core
+﻿namespace HHVacancy.Core.Extensions
 {
     public static class IAsyncEnumerableBatchExtension
     {

@@ -87,7 +87,14 @@ namespace HHVacancy.Storage.Services.Implementations
             var result = new StringBuilder();
             foreach (var letter in source)
             {
-                result.Append(ConvertedLetters[letter]);
+                if (ConvertedLetters.TryGetValue(letter, out string? value))
+                {
+                    result.Append(value);
+                }
+                else
+                {
+                    result.Append(letter);
+                }
             }
             return result.ToString();
         }

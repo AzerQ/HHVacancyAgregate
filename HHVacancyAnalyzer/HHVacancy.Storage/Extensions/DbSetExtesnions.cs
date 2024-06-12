@@ -10,7 +10,7 @@ public static class DbSetExtesnions
         var newEntities = entities.Where(e =>
         {
             var key = keySelector(e);
-            return key != null && !existingKeys.Contains(key);
+            return key != null && !existingKeys.ExistsItem(key);
         });
         await dbSet.AddRangeAsync(newEntities);
     }

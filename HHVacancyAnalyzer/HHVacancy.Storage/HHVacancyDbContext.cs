@@ -62,10 +62,10 @@ public class HHVacancyDbContext : DbContext
             .IsRequired(false);
 
         modelBuilder.Entity<KeySkillVacancyLinkEntity>()
-            .HasKey(ksvac => new VacancyKeySkillKey
+            .HasKey(ksvac => new
             {
-                KeySkillId = ksvac.KeySkillId,
-                VacancyId = ksvac.VacancyId
+                ksvac.KeySkillId,
+                ksvac.VacancyId
             });
 
     }
