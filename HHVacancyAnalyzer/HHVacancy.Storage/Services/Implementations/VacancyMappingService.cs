@@ -10,7 +10,10 @@ public class VacancyMappingService : IVacancyMappingService
 {
     public VacancyDetailsEntity MapFromFullVacancy(Vacancy fullVacancy)
     {
-        return fullVacancy.Adapt<VacancyDetailsEntity>();
+        var vacancyDetail = fullVacancy.Adapt<VacancyDetailsEntity>();
+        vacancyDetail.VacancyId = fullVacancy.Id;
+
+        return vacancyDetail;
     }
 
     public VacancyEntity MapFromVacancyItem(VacancySearchItem vacancyItem)

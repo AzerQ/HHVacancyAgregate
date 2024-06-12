@@ -33,6 +33,15 @@ namespace HHVacancy.Core.Services.Implementations
 
                 insertedItemsCount += dbEntities.Count();
 
+
+                IEnumerable<int> vacancyIds = dbEntities.Select(vacancy => int.Parse(vacancy.Id));
+
+                await foreach (var vacancyFullData in _apiService.GetVacanciesByIds(vacancyIds))
+                {
+                    VacancyDetailsEntity vacancyDetails = _mappingService.MapFromFullVacancy(vacancyFullData);
+                    await _dbService.InsertVacancyDetails(vacancyDetails);
+                }
+
                 float totalCount = Math.Min(request.MaxResults, vacancySearchPage.Found);
 
                 float donePercent = (insertedItemsCount / totalCount) * 100;

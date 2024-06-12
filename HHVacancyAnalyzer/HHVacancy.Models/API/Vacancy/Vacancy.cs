@@ -124,9 +124,6 @@ namespace HHVacancy.Models.API.Vacancy
         [JsonPropertyName("test")]
         public Test Test { get; set; }
 
-        [JsonPropertyName("vacancy_constructor_template")]
-        public VacancyConstructorTemplate VacancyConstructorTemplate { get; set; }
-
         [JsonPropertyName("video_vacancy")]
         public VideoVacancy VideoVacancy { get; set; }
 

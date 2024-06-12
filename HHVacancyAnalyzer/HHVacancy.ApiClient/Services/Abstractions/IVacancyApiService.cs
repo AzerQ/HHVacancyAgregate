@@ -34,4 +34,11 @@ public interface IVacancyApiService : IDisposable
     /// <param name="searchVacancySearchRequest">Поисковые фильтры</param>
     /// <returns>Асинхронный поток данных поисковых страниц вакансий</returns>
     IAsyncEnumerable<VacancySearchResult> SearchVacancies(VacancySearchRequest searchVacancySearchRequest);
+
+    /// <summary>
+    /// Поучить полные данные по вакансиям по их идентификаторам
+    /// </summary>
+    /// <param name="vacancyIds">Идентификаторы вакансий</param>
+    /// <returns>Асинхронный поток данных вакансий</returns>
+    IAsyncEnumerable<Vacancy> GetVacanciesByIds(IEnumerable<int> vacancyIds);
 }

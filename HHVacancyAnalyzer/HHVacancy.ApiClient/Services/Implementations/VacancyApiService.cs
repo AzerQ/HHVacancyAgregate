@@ -4,6 +4,7 @@ using Flurl.Http.Configuration;
 using HHVacancy.ApiClient.Services.Abstractions;
 using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -160,6 +161,22 @@ public class VacancyApiService : IVacancyApiService
                 .ToDictionary(pageNumber: i, pageSize: requestPagination.PageSize);
             yield return await GetVacancySearchPage(vacancySearchParams);
         }
+    }
+
+    public async IAsyncEnumerable<Vacancy> GetVacanciesByIds(IEnumerable<int> vacancyIds)
+    {
+        int maxRequestsPerSecond = 15;
+
+        var policy = Policy
+            .Handle<FlurlHttpException>()
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(1 / maxRequestsPerSecond));
+
+        foreach (var id in vacancyIds)
+        {
+            yield return await policy.ExecuteAsync(() => GetVacancyById(id));
+        }
+
+        
     }
 
     protected virtual void Dispose(bool disposing)

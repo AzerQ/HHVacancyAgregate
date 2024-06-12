@@ -25,7 +25,7 @@ namespace HHVacancy.ConsoleApp
                 {
                     OnlyWithSalary = true,
                     Text = userPrompt,
-                    MaxResults = 300
+                    MaxResults = 150
                 };
 
                 int findedResults = await vacancyGrabberService
