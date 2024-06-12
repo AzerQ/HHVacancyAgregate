@@ -122,4 +122,9 @@ public class VacancyDbService : IVacancyDbService
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
     }
+
+    public async Task InsertVacancyDetails(params VacancyDetailsEntity[] vacancyDetails)
+    {
+       await _dbContext.VacancyDetails.AddRangeAsync(vacancyDetails);
+    }
 }

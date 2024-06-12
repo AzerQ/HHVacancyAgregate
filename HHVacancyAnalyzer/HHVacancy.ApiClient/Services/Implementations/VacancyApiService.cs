@@ -6,6 +6,7 @@ using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -86,7 +87,7 @@ public class VacancyApiService : IVacancyApiService
 
         _flurlClient = GetFlurlClient(_baseUrl, GetApiToken(), _appName, _serializer);
 
-        
+
     }
 
     public async Task<Vacancy> GetVacancyById(int id)
@@ -135,13 +136,15 @@ public class VacancyApiService : IVacancyApiService
 
         var serverResponse = await _flurlClient.Request("vacancies")
                                   .SetQueryParams(requestParams)
-                                   .GetJsonAsync<RequestResultsCount>();                           
+                                  .GetJsonAsync<RequestResultsCount>();
 
         int totalSize = serverResponse.Found;
 
+        int resultsCount = new int[] { totalSize, _maxItemsSize, vacancySearchRequest.MaxResults }.Min();
+
         return new Pagination
         {
-            TotalSize = Math.Min(totalSize, _maxItemsSize),
+            TotalSize = resultsCount,
             PageSize = _maxPageSize
         };
 

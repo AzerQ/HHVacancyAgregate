@@ -25,7 +25,8 @@ namespace HHVacancy.ConsoleApp
                 var vacancySearchRequest = new VacancySearchRequest
                 {
                     OnlyWithSalary = true,
-                    Text = userPrompt
+                    Text = userPrompt,
+                    MaxResults = 150
                 };
 
                 int findedResults = await vacancyGrabberService

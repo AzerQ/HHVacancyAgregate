@@ -304,5 +304,11 @@
         /// </summary>
 
         public string? Text { get; set; }
+
+        /// <summary>
+        /// Ограничение на максимальное кол-во результатов (не более 2000)
+        /// </summary>
+
+        public int MaxResults { get; set; } = 2000;
     }
 }
