@@ -25,6 +25,8 @@ public class HHVacancyDbContext : DbContext
 
     public DbSet<VacancyEntity> Vacancies { get; set; }
 
+    public DbSet<VacancyDetailsEntity> VacancyDetails { get; set; }
+
     private readonly IJsonDbSerializer _jsonDb;
 
     public HHVacancyDbContext(IJsonDbSerializer jsonDbSrializer) : base()
@@ -41,6 +43,7 @@ public class HHVacancyDbContext : DbContext
 
         var adressJsonConverter = _jsonDb.GetJsonValueConverter<Address>();
         var contactsJsonConverter = _jsonDb.GetJsonValueConverter<Contacts>();
+        var keySkillsJsonConverter = _jsonDb.GetJsonValueConverter<List<KeySkill>>();
 
         modelBuilder.Entity<VacancyEntity>()
             .Property(nameof(VacancyEntity.Address))
@@ -52,6 +55,12 @@ public class HHVacancyDbContext : DbContext
             .Property(nameof(VacancyEntity.Contacts))
             .HasConversion(contactsJsonConverter)
             .IsRequired(false);
+
+        modelBuilder.Entity<VacancyDetailsEntity>()
+            .Property(nameof(VacancyDetailsEntity.KeySkills))
+            .HasConversion(keySkillsJsonConverter)
+            .IsRequired(false);
+
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
