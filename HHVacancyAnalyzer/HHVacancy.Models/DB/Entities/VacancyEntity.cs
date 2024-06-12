@@ -82,5 +82,7 @@ public class VacancyEntity
 
     [ForeignKey(nameof(ExperienceId))]
     public ExperienceEntity Experience { get; set; }
+
+    public virtual ICollection<KeySkillVacancyLinkEntity> VacancyKeySkillsLinks { get; set; }
 }
 

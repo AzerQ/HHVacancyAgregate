@@ -1,4 +1,5 @@
-﻿using HHVacancy.Models.DB.Entities;
+﻿using HHVacancy.Models.DB;
+using HHVacancy.Models.DB.Entities;
 
 namespace HHVacancy.Storage.Services.Abstractions;
 
@@ -20,6 +21,6 @@ public interface IVacancyDbService : IDisposable
 
     Task InsertVacancies(params VacancyEntity[] vacancies);
 
-    Task InsertVacancyDetails(params VacancyDetailsEntity[] vacancyDetails);
+    Task InsertVacancyDetails(params VacancyFullInfoDTO[] vacancyFullInfo);
 
 }

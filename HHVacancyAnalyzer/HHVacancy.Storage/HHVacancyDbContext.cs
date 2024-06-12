@@ -1,4 +1,5 @@
 ﻿using HHVacancy.Models.API.Vacancy;
+using HHVacancy.Models.DB;
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Storage.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,10 @@ public class HHVacancyDbContext : DbContext
 
     public DbSet<VacancyDetailsEntity> VacancyDetails { get; set; }
 
+    public DbSet<KeySkillEntity> KeySkills { get; set; }
+
+    public DbSet<KeySkillVacancyLinkEntity> VacancyKeySkills { get; set; }
+
     private readonly IJsonDbSerializer _jsonDb;
 
     public HHVacancyDbContext(IJsonDbSerializer jsonDbSrializer) : base()
@@ -44,7 +49,6 @@ public class HHVacancyDbContext : DbContext
 
         var adressJsonConverter = _jsonDb.GetJsonValueConverter<Address>();
         var contactsJsonConverter = _jsonDb.GetJsonValueConverter<Contacts>();
-        var keySkillsJsonConverter = _jsonDb.GetJsonValueConverter<List<KeySkill>>();
 
         modelBuilder.Entity<VacancyEntity>()
             .Property(nameof(VacancyEntity.Address))
@@ -57,10 +61,12 @@ public class HHVacancyDbContext : DbContext
             .HasConversion(contactsJsonConverter)
             .IsRequired(false);
 
-        modelBuilder.Entity<VacancyDetailsEntity>()
-            .Property(nameof(VacancyDetailsEntity.KeySkills))
-            .HasConversion(keySkillsJsonConverter)
-            .IsRequired(false);
+        modelBuilder.Entity<KeySkillVacancyLinkEntity>()
+            .HasKey(ksvac => new VacancyKeySkillKey
+            {
+                KeySkillId = ksvac.KeySkillId,
+                VacancyId = ksvac.VacancyId
+            });
 
     }
 

@@ -29,9 +29,9 @@ namespace HHVacancy.ConsoleApp
 
             Progress<float> progress = new Progress<float>(percent => Console.WriteLine("{0} % complete", percent));
 
-            var searchStrings = GetFromFile("SearchInputs.txt");
+            IEnumerable<string> searchStrings = GetFromFile("SearchInputs.txt");
 
-            foreach (var searchString in searchStrings)
+            foreach (string searchString in searchStrings)
             {
                 var vacancySearchRequest = new VacancySearchRequest
                 {

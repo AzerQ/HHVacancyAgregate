@@ -42,6 +42,7 @@ namespace HHVacancy.Core
         private static void BuildStorageServicesConfiguration(IServiceCollection serviceCollection)
         {
             serviceCollection.AddTransient<IJsonDbSerializer, JsonDbSerializer>()
+                             .AddTransient<ITransliterationService, TransliterationService>()
                              .AddTransient<IVacancyMappingService, VacancyMappingService>()
                              .AddDbContext<HHVacancyDbContext>()
                              .AddTransient<IVacancyDbService, VacancyDbService>();

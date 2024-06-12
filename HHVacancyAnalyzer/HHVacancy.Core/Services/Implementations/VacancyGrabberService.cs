@@ -1,7 +1,9 @@
 ﻿using HHVacancy.ApiClient.Services.Abstractions;
+using HHVacancy.Core.Extensions;
 using HHVacancy.Core.Services.Abstractions;
 using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
+using HHVacancy.Models.DB;
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Storage.Services.Abstractions;
 
@@ -41,7 +43,7 @@ namespace HHVacancy.Core.Services.Implementations
 
                 await foreach (List<Vacancy> vacacncyFullDataBatch in vacancyStream)
                 {
-                   VacancyDetailsEntity[] vacancyDetails = vacacncyFullDataBatch
+                   VacancyFullInfoDTO[] vacancyDetails = vacacncyFullDataBatch
                                                                       .Select(_mappingService.MapFromFullVacancy)
                                                                       .ToArray();
                       

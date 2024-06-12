@@ -1,4 +1,5 @@
-﻿using HHVacancy.Models.DB.Entities;
+﻿using HHVacancy.Models.DB;
+using HHVacancy.Models.DB.Entities;
 using HHVacancy.Storage.Extensions;
 using HHVacancy.Storage.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -107,6 +108,22 @@ public class VacancyDbService : IVacancyDbService
 
     }
 
+    public async Task InsertVacancyDetails(params VacancyFullInfoDTO[] vacancyFullInfo)
+    {
+        await InsertEntites(db => db.VacancyDetails,
+            vacancyFullInfo.Select(info => info.VacancyDetail),
+            vacancyDetail => vacancyDetail.VacancyId);
+
+        await InsertEntites(db => db.KeySkills,
+            vacancyFullInfo.SelectMany(info => info.KeySkillEntities),
+            keySkill => keySkill.Id);
+
+        await InsertEntites(db => db.VacancyKeySkills,
+              vacancyFullInfo.SelectMany(info => info.KeySkillVacancyLinkEntities),
+              ksvac => new VacancyKeySkillKey { VacancyId = ksvac.VacancyId, KeySkillId = ksvac.KeySkillId });
+
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -123,8 +140,4 @@ public class VacancyDbService : IVacancyDbService
         GC.SuppressFinalize(this);
     }
 
-    public async Task InsertVacancyDetails(params VacancyDetailsEntity[] vacancyDetails)
-    {
-        await InsertEntites(db => db.VacancyDetails, vacancyDetails, vacancyDetail => vacancyDetail.VacancyId);
-    }
 }
