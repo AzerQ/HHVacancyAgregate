@@ -57,6 +57,7 @@ public class HHVacancyDbContext : DbContext
             .IsRequired(false);
 
         modelBuilder.Entity<VacancyDetailsEntity>()
+            .HasNoKey()
             .Property(nameof(VacancyDetailsEntity.KeySkills))
             .HasConversion(keySkillsJsonConverter)
             .IsRequired(false);

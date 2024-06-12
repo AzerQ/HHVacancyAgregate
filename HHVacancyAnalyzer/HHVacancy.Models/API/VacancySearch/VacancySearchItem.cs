@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace HHVacancy.Models.API.VacancySearch
 {
-    public class VacancyItem
+    public class VacancySearchItem
     {
         [JsonPropertyName("accept_incomplete_resumes")]
         public bool AcceptIncompleteResumes { get; set; }

@@ -8,7 +8,7 @@ namespace HHVacancy.Models.API.VacancySearch
         public int Found { get; set; }
 
         [JsonPropertyName("items")]
-        public List<VacancyItem> Items { get; set; }
+        public List<VacancySearchItem> Items { get; set; }
 
         [JsonPropertyName("page")]
         public int Page { get; set; }

@@ -1,6 +1,8 @@
 ﻿using Flurl.Http.Configuration;
 using HHVacancy.ApiClient.Services.Abstractions;
 using HHVacancy.ApiClient.Services.Implementations;
+using HHVacancy.Core.Services.Abstractions;
+using HHVacancy.Core.Services.Implementations;
 using HHVacancy.Storage;
 using HHVacancy.Storage.Services.Abstractions;
 using HHVacancy.Storage.Services.Implementations;
@@ -20,8 +22,13 @@ namespace HHVacancy.Core
         static ServicesContainer()
         {
             _services = new ServiceCollection();
+
             BuildApiServicesConfiguration(_services);
+
             BuildStorageServicesConfiguration(_services);
+
+            BuildCoreServiceConfiguration(_services);
+
             _serviceProvider = _services.BuildServiceProvider();
 
         }
@@ -38,6 +45,11 @@ namespace HHVacancy.Core
                              .AddTransient<IVacancyMappingService, VacancyMappingService>()
                              .AddDbContext<HHVacancyDbContext>()
                              .AddTransient<IVacancyDbService, VacancyDbService>();
+        }
+
+        private static void BuildCoreServiceConfiguration(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddTransient<IVacancyGrabberService, VacancyGrabberService>();
         }
 
         /// <summary>
