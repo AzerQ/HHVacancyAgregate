@@ -7,6 +7,19 @@ namespace HHVacancy.ConsoleApp
 
     public class Program
     {
+        const int MaxSearchItemsSize = 100;
+
+        public static IEnumerable<string> GetFromUserPrompt()
+        {
+            Console.Write("Введите текст для поиска вакансий на ресурсе hh.ru: ");
+            string userPrompt = Console.ReadLine();
+            yield return userPrompt;
+        }
+
+        public static IEnumerable<string> GetFromFile(string path)
+        {
+            return File.ReadAllLines(path);
+        }
 
 
         static async Task Main(string[] args)
@@ -16,24 +29,23 @@ namespace HHVacancy.ConsoleApp
 
             Progress<float> progress = new Progress<float>(percent => Console.WriteLine("{0} % complete", percent));
 
-            while (true)
-            {
-                Console.Write("Введите текст для поиска вакансий на ресурсе hh.ru: ");
-                string userPrompt = Console.ReadLine();
+            var searchStrings = GetFromFile("SearchInputs.txt");
 
+            foreach (var searchString in searchStrings)
+            {
                 var vacancySearchRequest = new VacancySearchRequest
                 {
                     OnlyWithSalary = true,
-                    Text = userPrompt,
-                    MaxResults = 150
+                    Text = searchString,
+                    MaxResults = MaxSearchItemsSize
                 };
 
                 int findedResults = await vacancyGrabberService
                     .GrabVacancySearchResults(vacancySearchRequest, progress);
 
-                Console.WriteLine("Найденно и сохранено {0} записей по запросу: '{1}'", findedResults, userPrompt);
-            }
+                Console.WriteLine("Найденно и сохранено {0} записей по запросу: '{1}'", findedResults, searchString);
 
+            }
         }
 
 

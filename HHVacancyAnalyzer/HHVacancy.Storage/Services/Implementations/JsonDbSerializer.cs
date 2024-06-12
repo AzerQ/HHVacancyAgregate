@@ -11,7 +11,7 @@ namespace HHVacancy.Storage.Services.Implementations
         private readonly JsonSerializerOptions _serializerOptions =
             new JsonSerializerOptions
             {
-                Encoder = JavaScriptEncoder.Create(UnicodeRanges.All)
+                Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic)
             };
 
         private string JsonSerialize(object obj) => JsonSerializer.Serialize(obj, _serializerOptions);

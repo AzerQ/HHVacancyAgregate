@@ -125,6 +125,6 @@ public class VacancyDbService : IVacancyDbService
 
     public async Task InsertVacancyDetails(params VacancyDetailsEntity[] vacancyDetails)
     {
-       await _dbContext.VacancyDetails.AddRangeAsync(vacancyDetails);
+        await InsertEntites(db => db.VacancyDetails, vacancyDetails, vacancyDetail => vacancyDetail.VacancyId);
     }
 }

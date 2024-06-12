@@ -1,5 +1,6 @@
 ﻿using HHVacancy.ApiClient.Services.Abstractions;
 using HHVacancy.Core.Services.Abstractions;
+using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Storage.Services.Abstractions;
@@ -36,9 +37,14 @@ namespace HHVacancy.Core.Services.Implementations
 
                 IEnumerable<int> vacancyIds = dbEntities.Select(vacancy => int.Parse(vacancy.Id));
 
-                await foreach (var vacancyFullData in _apiService.GetVacanciesByIds(vacancyIds))
+                IAsyncEnumerable<List<Vacancy>> vacancyStream = _apiService.GetVacanciesByIds(vacancyIds).Buffer(20);
+
+                await foreach (List<Vacancy> vacacncyFullDataBatch in vacancyStream)
                 {
-                    VacancyDetailsEntity vacancyDetails = _mappingService.MapFromFullVacancy(vacancyFullData);
+                   VacancyDetailsEntity[] vacancyDetails = vacacncyFullDataBatch
+                                                                      .Select(_mappingService.MapFromFullVacancy)
+                                                                      .ToArray();
+                      
                     await _dbService.InsertVacancyDetails(vacancyDetails);
                 }
 
