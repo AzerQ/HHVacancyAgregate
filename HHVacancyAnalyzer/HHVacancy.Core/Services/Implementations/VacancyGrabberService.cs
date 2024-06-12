@@ -19,7 +19,7 @@ namespace HHVacancy.Core.Services.Implementations
             _dbService = dbService;
         }
 
-        public async Task<int> GrabVacancySearchResults(VacancySearchRequest request)
+        public async Task<int> GrabVacancySearchResults(VacancySearchRequest request, IProgress<float> progress)
         {
             int insertedItemsCount = 0;
 
@@ -32,6 +32,12 @@ namespace HHVacancy.Core.Services.Implementations
                 await _dbService.InsertVacancies(dbEntities.ToArray());
 
                 insertedItemsCount += dbEntities.Count();
+
+                float totalCount = Math.Min(request.MaxResults, vacancySearchPage.Found);
+
+                float donePercent = (insertedItemsCount / totalCount) * 100;
+
+                progress?.Report(donePercent);
 
             }
 
