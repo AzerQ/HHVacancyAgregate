@@ -1,0 +1,79 @@
+@startuml VacancyFullModel
+class Vacancy {
+    +id: string
+    +name: string
+    +area: Area
+    +employer: Employer
+    +salary: Salary
+    +published_at: date
+    +key_skills: List<KeySkill>
+    +description: string
+    +address: Address
+    +contacts: Contacts
+    +experience: Experience
+    +employment: Employment
+    +schedule: Schedule
+}
+
+class Area {
+    +id: string
+    +name: string
+}
+
+class Employer {
+    +id: string
+    +name: string
+    +url: string
+}
+
+class Salary {
+    +from: int
+    +to: int
+    +currency: string
+}
+
+class KeySkill {
+    +name: string
+}
+
+class Address {
+    +city: string
+    +street: string
+    +building: string
+    +description: string
+    +lat: float
+    +lng: float
+    +metro_stations: List<MetroStation>
+}
+
+class Contacts {
+    +name: string
+    +email: string
+    +phones: List<Phone>
+}
+
+class Experience {
+    +id: string
+    +name: string
+}
+
+class Employment {
+    +id: string
+    +name: string
+}
+
+class Schedule {
+    +id: string
+    +name: string
+}
+
+Vacancy --> Area
+Vacancy --> Employer
+Vacancy --> Salary
+Vacancy --> "0..*" KeySkill
+Vacancy --> Address
+Vacancy --> Contacts
+Vacancy --> Experience
+Vacancy --> Employment
+Vacancy --> Schedule
+@enduml

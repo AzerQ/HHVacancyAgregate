@@ -1,0 +1,33 @@
+@startuml VacancySearchResults
+class Vacancy {
+    +id: string
+    +name: string
+    +area: Area
+    +employer: Employer
+    +salary: Salary
+    +published_at: date
+}
+
+class Area {
+    +id: string
+    +name: string
+}
+
+class Employer {
+    +id: string
+    +name: string
+}
+
+class Salary {
+    +from: int
+    +to: int
+    +currency: string
+}
+
+
+
+Vacancy --> Area
+Vacancy --> Employer
+Vacancy --> Salary
+
+@enduml
