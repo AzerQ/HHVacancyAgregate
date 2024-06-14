@@ -1,0 +1,72 @@
+@startuml Database
+entity VacancyEntity {
+    +ID: int
+    +Title: string
+    +Description: string
+    +EmployerID: int
+    +AreaID: int
+    +ScheduleID: int
+    +ExperienceID: int
+    +EmploymentID: int
+    +ProfessionalRoleId: int
+}
+
+entity EmployerEntity {
+    +ID: int
+    +Name: string
+    +Website: string
+}
+
+entity AreaEntity {
+    +ID: int
+    +Name: string
+}
+
+entity ScheduleEntity {
+    +ID: int
+    +Name: string
+}
+
+entity ExperienceEntity {
+    +ID: int
+    +Name: string
+}
+
+entity EmploymentEntity {
+    +ID: int
+    +Name: string
+}
+
+entity KeySkillEntity {
+    +ID: string
+    +Name: string
+}
+
+entity VacancyKeySkillLinkEntity {
+    +VacancyID: int
+    +KeySkillID: int
+}
+
+entity ProfessionalRoleEntity {
+    +ID: int
+    +Name: string
+}
+
+entity VacancyFullInfo {
+    +VacancyID: int
+    +FullDescription: string
+}
+
+VacancyEntity }|..|| EmployerEntity : "employer"
+VacancyEntity }|..|| AreaEntity : "area"
+VacancyEntity }|..|| ScheduleEntity : "schedule"
+VacancyEntity }|..|| ExperienceEntity : "experience"
+VacancyEntity }|..|| EmploymentEntity : "employment"
+VacancyEntity }|..|| ProfessionalRoleEntity : "professionalRole"
+
+VacancyKeySkillLinkEntity }|..|| VacancyEntity : "vacancy"
+VacancyKeySkillLinkEntity }|..|| KeySkillEntity : "keySkill"
+
+VacancyFullInfo }|..|| VacancyEntity : "vacancyFullInfo"
+
+@enduml
