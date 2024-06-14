@@ -1,60 +1,80 @@
 @startuml Database
 entity VacancyEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Title: string
     +Description: string
-    +EmployerID: int
-    +AreaID: int
-    +ScheduleID: int
-    +ExperienceID: int
-    +EmploymentID: int
-    +ProfessionalRoleId: int
+    +EmployerID: int <<FK>>
+    +AreaID: int <<FK>>
+    +ScheduleID: int <<FK>>
+    +ExperienceID: int <<FK>>
+    +EmploymentID: int <<FK>>
+    +ProfessionalRoleID: int <<FK>>
+    --
+    Table: "Vacacncies"
 }
 
 entity EmployerEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
     +Website: string
+    --
+    Table: "Employers"
 }
 
 entity AreaEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
+    --
+    Table: "AreaEntity"
 }
 
 entity ScheduleEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
+    --
+    Table: "Schedules"
 }
 
 entity ExperienceEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
+    --
+    Table: "Experiences"
 }
 
 entity EmploymentEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
+    --
+    Table: "Employments"
 }
 
 entity KeySkillEntity {
-    +ID: string
+    +ID: string <<PK>>
     +Name: string
+    --
+    Table: "KeySkills"
 }
 
 entity VacancyKeySkillLinkEntity {
-    +VacancyID: int
-    +KeySkillID: int
+    +VacancyID: int <<PK>><<FK>>
+    +KeySkillID: int <<PK>><<FK>>
+    --
+    Table: "KeySkillVacancyLinks"
 }
 
 entity ProfessionalRoleEntity {
-    +ID: int
+    +ID: int <<PK>>
     +Name: string
+    --
+    Table: "ProfessionalRoles"
 }
 
 entity VacancyFullInfo {
-    +VacancyID: int
+    +VacancyID: int <<PK>><<FK>>
     +FullDescription: string
+    --
+    Table: "VacancyDetail"
 }
 
 VacancyEntity }|..|| EmployerEntity : "employer"
