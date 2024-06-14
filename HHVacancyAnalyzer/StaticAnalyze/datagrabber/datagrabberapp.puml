@@ -1,0 +1,58 @@
+@startuml DataGrabber
+package "HHVacancyAnalyzer" {
+    package "HHVacancy.ApiClient" {
+        [CorrectDateSerializer] 
+        [VacancyApiService]
+        interface IVacancyApiService
+    }
+    
+    package "HHVacancy.Storage" {
+        [JsonDbSerializer]
+        [TransliterationService]
+        [VacancyMappingService]
+        [VacancyDbService]
+        interface IJsonDbSerializer
+        interface ITransliterationService
+        interface IVacancyMappingService
+        interface IVacancyDbService
+        [HHVacancyDbContext]
+    }
+    
+    package "HHVacancy.Core" {
+        [ServicesContainer]
+        [VacancyGrabberService]
+        interface IVacancyGrabberService
+    }
+
+    package "HHVacancy.ConsoleApp" {
+        [Program]
+    }
+}
+
+[CorrectDateSerializer] --> [ISerializer]
+[VacancyApiService] --> IVacancyApiService
+
+[JsonDbSerializer] --> IJsonDbSerializer
+[TransliterationService] --> ITransliterationService
+[VacancyMappingService] --> IVacancyMappingService
+[VacancyDbService] --> IVacancyDbService
+
+[VacancyGrabberService] --> IVacancyGrabberService
+
+[Program] --> [ServicesContainer]
+
+note right of [ServicesContainer] 
+Глобальная конфигурация сервисов
+настраивает зависимости и 
+предоставляет доступ к сервисам
+end note
+
+[ServicesContainer] .right.> [CorrectDateSerializer] : Использует
+[ServicesContainer] .right.> [VacancyApiService] : Использует
+[ServicesContainer] .right.> [JsonDbSerializer] : Использует
+[ServicesContainer] .right.> [TransliterationService] : Использует
+[ServicesContainer] .right.> [VacancyMappingService] : Использует
+[ServicesContainer] .right.> [VacancyDbService] : Использует
+[ServicesContainer] .right.> [VacancyGrabberService] : Использует
+[ServicesContainer] .down.> [HHVacancyDbContext] : Использует
+@enduml
