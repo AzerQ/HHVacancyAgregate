@@ -1,5 +1,7 @@
-﻿using HHVacancy.Models.DB;
+﻿using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DB.Entities.Links;
+using HHVacancy.Models.DTO;
 using HHVacancy.Storage.Extensions;
 using HHVacancy.Storage.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -53,6 +55,16 @@ public class VacancyDbService : IVacancyDbService
         await InsertEntites(db => db.ProfessionalRoles, professionalRoles, professionalRole => professionalRole.Id);
     }
 
+    public async Task InsertProfessionalRolesLinks(params ProfessionalRoleVacancyLinkEntity[] professionalRoleVacancyLinks)
+    {
+        await InsertEntites(db => db.ProfessionalRoleVacancies, professionalRoleVacancyLinks, profRoleVacancy =>
+        new
+        {
+            profRoleVacancy.ProfessionalRoleId,
+            profRoleVacancy.VacancyId
+        });
+    }
+
     public async Task InsertSchedules(params ScheduleEntity[] schedules)
     {
         await InsertEntites(db => db.Schedules, schedules, schedule => schedule.Id);
@@ -71,7 +83,6 @@ public class VacancyDbService : IVacancyDbService
         vacancy.Employer = null;
         vacancy.Employment = null;
         vacancy.Experience = null;
-        vacancy.ProfessionalRoles = null;
         vacancy.Schedule = null;
         vacancy.Type = null;
     }
@@ -89,9 +100,6 @@ public class VacancyDbService : IVacancyDbService
 
         IEnumerable<ExperienceEntity> experienceItems = vacancies.Select(vacancy => vacancy.Experience);
         await InsertExperienceItems(experienceItems.ToArray());
-
-        IEnumerable<ProfessionalRoleEntity> professionalRoles = vacancies.SelectMany(vacancy => vacancy.ProfessionalRoles);
-        await InsertProfessionalRoles(professionalRoles.ToArray());
 
         IEnumerable<ScheduleEntity> schedules = vacancies.Select(vacancy => vacancy.Schedule);
         await InsertSchedules(schedules.ToArray());
@@ -120,7 +128,7 @@ public class VacancyDbService : IVacancyDbService
 
         await InsertEntites(db => db.VacancyKeySkills,
               vacancyFullInfo.SelectMany(info => info.KeySkillVacancyLinkEntities),
-              ksvac => new VacancyKeySkillKey { VacancyId = ksvac.VacancyId, KeySkillId = ksvac.KeySkillId });
+              ksvac => new { ksvac.VacancyId, ksvac.KeySkillId });
 
     }
 

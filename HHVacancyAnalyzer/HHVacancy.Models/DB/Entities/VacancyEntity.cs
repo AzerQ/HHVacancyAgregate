@@ -1,4 +1,5 @@
 ﻿using HHVacancy.Models.API.Vacancy;
+using HHVacancy.Models.DB.Entities.Links;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,8 +25,6 @@ public class VacancyEntity
     public virtual EmployerEntity Employer { get; set; }
 
     public bool HasTest { get; set; }
-
-    public virtual List<ProfessionalRoleEntity> ProfessionalRoles { get; set; }
 
     public DateTime PublishedAt { get; set; }
 
@@ -84,5 +83,7 @@ public class VacancyEntity
     public ExperienceEntity Experience { get; set; }
 
     public virtual ICollection<KeySkillVacancyLinkEntity> VacancyKeySkillsLinks { get; set; }
+
+    public virtual ICollection<ProfessionalRoleVacancyLinkEntity> ProfessionalRoleVacancyLink { get; set; }
 }
 

@@ -1,7 +1,8 @@
 ﻿using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
-using HHVacancy.Models.DB;
 using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DB.Entities.Links;
+using HHVacancy.Models.DTO;
 using HHVacancy.Storage.Services.Abstractions;
 using Mapster;
 
@@ -22,13 +23,13 @@ public class VacancyMappingService : IVacancyMappingService
                                  .Trim()
                                  .ToLower()
                                  .Replace(" ", "_");
-                                 
-        return _transliterationService.IsRuString(clearKeySkill) ? 
+
+        return _transliterationService.IsRuString(clearKeySkill) ?
              _transliterationService.ConvertToLatin(clearKeySkill)
              : clearKeySkill;
     }
 
-    public VacancyFullInfoDTO MapFromFullVacancy(Vacancy fullVacancy)
+    public VacancyFullInfoDTO MapVacancyInfoDTOFromFullVacancy(Vacancy fullVacancy)
     {
         var vacancyDetail = new VacancyDetailsEntity
         {
@@ -57,9 +58,24 @@ public class VacancyMappingService : IVacancyMappingService
         };
     }
 
-    public VacancyEntity MapFromVacancyItem(VacancySearchItem vacancyItem)
+    public VacancyEntity MapVacancyEntityFromVacancyItem(VacancySearchItem vacancyItem)
     {
         return vacancyItem.Adapt<VacancyEntity>();
+    }
+
+    public (ProfessionalRoleEntity[] profRoles, ProfessionalRoleVacancyLinkEntity[] profRoleVacancies)
+        MapProfessionalRolesFromVacancyItem(VacancySearchItem vacancyItem)
+    {
+        var professionalRoles = vacancyItem.ProfessionalRoles
+             .Select(profRole => profRole.Adapt<ProfessionalRoleEntity>())
+             .ToArray();
+
+        var profRoleVacancies = vacancyItem.ProfessionalRoles
+            .Select(profRole => new ProfessionalRoleVacancyLinkEntity
+            { ProfessionalRoleId = profRole.Id, VacancyId = vacancyItem.Id })
+            .ToArray();
+
+        return (professionalRoles, profRoleVacancies);
     }
 }
 

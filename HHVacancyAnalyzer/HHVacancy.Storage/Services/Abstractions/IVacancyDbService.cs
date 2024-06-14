@@ -1,5 +1,7 @@
-﻿using HHVacancy.Models.DB;
+﻿using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DB.Entities.Links;
+using HHVacancy.Models.DTO;
 
 namespace HHVacancy.Storage.Services.Abstractions;
 
@@ -14,6 +16,8 @@ public interface IVacancyDbService : IDisposable
     Task InsertExperienceItems(params ExperienceEntity[] experienceItems);
 
     Task InsertProfessionalRoles(params ProfessionalRoleEntity[] professionalRoles);
+
+    Task InsertProfessionalRolesLinks(params ProfessionalRoleVacancyLinkEntity[] professionalRoleVacancyLinks);
 
     Task InsertSchedules(params ScheduleEntity[] schedules);
 

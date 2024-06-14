@@ -3,8 +3,8 @@ using HHVacancy.Core.Extensions;
 using HHVacancy.Core.Services.Abstractions;
 using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
-using HHVacancy.Models.DB;
 using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DTO;
 using HHVacancy.Storage.Services.Abstractions;
 
 namespace HHVacancy.Core.Services.Implementations
@@ -28,14 +28,24 @@ namespace HHVacancy.Core.Services.Implementations
 
             await foreach (var vacancySearchPage in _apiService.SearchVacancies(request))
             {
+                List<VacancySearchItem> vacancies = vacancySearchPage.Items;
 
                 IEnumerable<VacancyEntity> dbEntities =
-                    vacancySearchPage.Items.Select(_mappingService.MapFromVacancyItem);
+                   vacancies.Select(_mappingService.MapVacancyEntityFromVacancyItem);
 
                 await _dbService.InsertVacancies(dbEntities.ToArray());
 
-                insertedItemsCount += dbEntities.Count();
+                var professionalRoleCombined = vacancies.Select(_mappingService.MapProfessionalRolesFromVacancyItem);
 
+                var professionalRoles = professionalRoleCombined.SelectMany( el => el.profRoles).ToArray();
+
+                await _dbService.InsertProfessionalRoles(professionalRoles);
+
+                var professionalRolesLinks = professionalRoleCombined.SelectMany(el => el.profRoleVacancies).ToArray();
+
+                await _dbService.InsertProfessionalRolesLinks(professionalRolesLinks);
+
+                insertedItemsCount += dbEntities.Count();
 
                 IEnumerable<int> vacancyIds = dbEntities.Select(vacancy => int.Parse(vacancy.Id));
 
@@ -44,7 +54,7 @@ namespace HHVacancy.Core.Services.Implementations
                 await foreach (List<Vacancy> vacacncyFullDataBatch in vacancyStream)
                 {
                    VacancyFullInfoDTO[] vacancyDetails = vacacncyFullDataBatch
-                                                                      .Select(_mappingService.MapFromFullVacancy)
+                                                                      .Select(_mappingService.MapVacancyInfoDTOFromFullVacancy)
                                                                       .ToArray();
                       
                     await _dbService.InsertVacancyDetails(vacancyDetails);

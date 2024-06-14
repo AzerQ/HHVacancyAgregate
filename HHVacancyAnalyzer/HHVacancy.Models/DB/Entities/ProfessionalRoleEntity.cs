@@ -1,3 +1,4 @@
+using HHVacancy.Models.DB.Entities.Links;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,5 +14,5 @@ public class ProfessionalRoleEntity
 
     public string Name { get; set; }
 
-    public virtual List<VacancyEntity> VacancyEntities { get; set; }
+    public virtual ICollection<ProfessionalRoleVacancyLinkEntity> ProfessionalRoleVacancyLink { get; set; }
 }

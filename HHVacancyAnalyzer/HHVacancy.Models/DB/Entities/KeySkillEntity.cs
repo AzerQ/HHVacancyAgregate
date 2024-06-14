@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using HHVacancy.Models.DB.Entities.Links;
 
 namespace HHVacancy.Models.DB.Entities
 {

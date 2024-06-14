@@ -1,6 +1,7 @@
 ﻿using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.DB;
 using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DB.Entities.Links;
 using HHVacancy.Storage.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -32,6 +33,8 @@ public class HHVacancyDbContext : DbContext
     public DbSet<KeySkillEntity> KeySkills { get; set; }
 
     public DbSet<KeySkillVacancyLinkEntity> VacancyKeySkills { get; set; }
+
+    public DbSet<ProfessionalRoleVacancyLinkEntity> ProfessionalRoleVacancies { get; set; }
 
     private readonly IJsonDbSerializer _jsonDb;
 
@@ -66,6 +69,13 @@ public class HHVacancyDbContext : DbContext
             {
                 ksvac.KeySkillId,
                 ksvac.VacancyId
+            });
+
+        modelBuilder.Entity<ProfessionalRoleVacancyLinkEntity>()
+            .HasKey(rolevac => new
+            {
+                rolevac.ProfessionalRoleId,
+                rolevac.VacancyId
             });
 
     }

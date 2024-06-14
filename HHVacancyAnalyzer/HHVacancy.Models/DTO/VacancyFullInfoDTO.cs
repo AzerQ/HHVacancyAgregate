@@ -1,6 +1,7 @@
 ﻿using HHVacancy.Models.DB.Entities;
+using HHVacancy.Models.DB.Entities.Links;
 
-namespace HHVacancy.Models.DB
+namespace HHVacancy.Models.DTO
 {
     public class VacancyFullInfoDTO
     {

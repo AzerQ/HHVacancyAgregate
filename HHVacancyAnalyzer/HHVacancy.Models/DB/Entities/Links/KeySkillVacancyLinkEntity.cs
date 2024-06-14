@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HHVacancy.Models.DB.Entities
+namespace HHVacancy.Models.DB.Entities.Links
 {
     [Table("KeySkillVacancyLinks")]
     public class KeySkillVacancyLinkEntity
