@@ -7,7 +7,7 @@ namespace HHVacancy.ConsoleApp
 
     public class Program
     {
-        const int MaxSearchItemsSize = 100;
+        const int MaxSearchItemsSize = 500;
 
         public static IEnumerable<string> GetFromUserPrompt()
         {

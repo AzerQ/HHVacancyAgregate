@@ -1,32 +1,5 @@
-﻿Frontend разработчик
-JavaScript разработчик
-React разработчик
-Vue.js разработчик
-Backend разработчик
-Java разработчик
-.NET разработчик
-Node.js разработчик
-Python разработчик
-Full Stack разработчик
-Full Stack Developer
-JavaScript Full Stack
-iOS разработчик
-Android разработчик
-Mobile Developer
-Game Developer
-Unity разработчик
-Unreal Engine разработчик
-DevOps инженер
-DevOps Specialist
-System Administrator
-Data Scientist
-Machine Learning Engineer
-Data Analyst
-AI Engineer
-Artificial Intelligence Developer
-QA инженер
-Тестировщик ПО
-Automation Tester
-Cybersecurity Specialist
-Информационная безопасность
-Security Engineer
+﻿Разработчик
+DevOps
+QA
+Специалист информационной безопасности
+Сетевой инжинер
