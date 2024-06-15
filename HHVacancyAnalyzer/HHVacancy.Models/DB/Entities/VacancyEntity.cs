@@ -85,5 +85,9 @@ public class VacancyEntity
     public virtual ICollection<KeySkillVacancyLinkEntity> VacancyKeySkillsLinks { get; set; }
 
     public virtual ICollection<ProfessionalRoleVacancyLinkEntity> ProfessionalRoleVacancyLink { get; set; }
+
+    public int CountersResponses { get; set; }
+
+    public int CountersTotalResponses { get; set; }
 }
 
