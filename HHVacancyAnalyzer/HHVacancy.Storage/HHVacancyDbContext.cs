@@ -64,6 +64,22 @@ public class HHVacancyDbContext : DbContext
             .HasConversion(contactsJsonConverter)
             .IsRequired(false);
 
+        modelBuilder.Entity<VacancyEntity>()
+            .Property(p => p.HigherEducationMention)
+            .HasComputedColumnSql("IIF(LOWER(SnippetRequirement) LIKE '%высш__%образование%', 1, 0)");
+
+        modelBuilder.Entity<VacancyEntity>()
+            .Property(p => p.SalaryFromClear)
+            .HasComputedColumnSql("IIF(SalaryGross = 1, SalaryFrom * 0.87, SalaryFrom)");
+
+        modelBuilder.Entity<VacancyEntity>()
+            .Property(p => p.SalaryToClear)
+            .HasComputedColumnSql("IIF(SalaryGross = 1, SalaryTo * 0.87, SalaryTo)");
+
+        modelBuilder.Entity<VacancyEntity>()
+            .Property(p => p.SalaryMiddleClear)
+            .HasComputedColumnSql("(SalaryFromClear + SalaryToClear) / 2");
+
         modelBuilder.Entity<KeySkillVacancyLinkEntity>()
             .HasKey(ksvac => new
             {

@@ -89,5 +89,16 @@ public class VacancyEntity
     public int CountersResponses { get; set; }
 
     public int CountersTotalResponses { get; set; }
+
+    #region Computed columns
+    public bool HigherEducationMention { get; set; }
+
+    public float? SalaryFromClear { get; set; }
+
+    public float? SalaryToClear { get; set; }
+
+    public float? SalaryMiddleClear { get; set; }
+
+    #endregion
 }
 
