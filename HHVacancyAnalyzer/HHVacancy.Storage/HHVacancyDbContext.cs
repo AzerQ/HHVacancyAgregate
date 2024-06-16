@@ -42,6 +42,7 @@ public class HHVacancyDbContext : DbContext
     {
         _jsonDb = jsonDbSrializer;
         Database.EnsureCreated();
+        Database.ExecuteSqlRaw(Queries.CreateVacancyFullInfoView);
     }
 
 
@@ -103,6 +104,7 @@ public class HHVacancyDbContext : DbContext
         optionsBuilder.UseSqlite(connectionString)
                       //.LogTo(Console.WriteLine, (_, level) => level == LogLevel.Information)
                       .EnableSensitiveDataLogging();
+
     }
 }
 
