@@ -78,7 +78,7 @@ public class HHVacancyDbContext : DbContext
 
         modelBuilder.Entity<VacancyEntity>()
             .Property(p => p.SalaryMiddleClear)
-            .HasComputedColumnSql("(SalaryFromClear + SalaryToClear) / 2");
+            .HasComputedColumnSql("(COALESCE(SalaryFromClear, 0) + COALESCE(SalaryToClear, 0)) / 2");
 
         modelBuilder.Entity<KeySkillVacancyLinkEntity>()
             .HasKey(ksvac => new

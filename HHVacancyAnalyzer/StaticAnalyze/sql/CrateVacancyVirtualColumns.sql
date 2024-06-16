@@ -12,4 +12,4 @@ ADD COLUMN SalaryToClear REAL GENERATED ALWAYS AS (IIF(SalaryGross = 1, SalaryTo
 
 -- Добавление вычисления размера средней ЗП после вычета налогов
 ALTER TABLE Vacancies
-ADD COLUMN SalaryMiddleClear REAL GENERATED ALWAYS AS ((SalaryFromClear + SalaryToClear) / 2);
+ADD COLUMN SalaryMiddleClear REAL GENERATED ALWAYS AS ((COALESCE(SalaryFromClear, 0) + COALESCE(SalaryToClear, 0)) / 2);
