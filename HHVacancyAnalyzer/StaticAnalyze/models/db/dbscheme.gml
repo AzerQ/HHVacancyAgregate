@@ -71,9 +71,9 @@ graph
 		graphics
 		[
 			x	375.5
-			y	371.78353691101074
+			y	410.40853691101074
 			w	247.0
-			h	569.2723579406738
+			h	646.5223579406738
 			customconfiguration	"DEFAULT"
 			fill	"#FFFFCC"
 			outline	"#808080"
@@ -626,6 +626,82 @@ graph
 			x	420.0
 			y	637.1072158813477
 		]
+		LabelGraphics
+		[
+		]
+		LabelGraphics
+		[
+			text	"HigherEducationMention"
+			fontSize	11
+			fontName	"Inter"
+			x	276.0
+			y	656.4197158813477
+		]
+		LabelGraphics
+		[
+			text	"INT"
+			fontSize	11
+			fontName	"Inter"
+			x	420.0
+			y	656.4197158813477
+		]
+		LabelGraphics
+		[
+		]
+		LabelGraphics
+		[
+			text	"SalaryFromClear"
+			fontSize	11
+			fontName	"Inter"
+			x	276.0
+			y	675.7322158813477
+		]
+		LabelGraphics
+		[
+			text	"REAL"
+			fontSize	11
+			fontName	"Inter"
+			x	420.0
+			y	675.7322158813477
+		]
+		LabelGraphics
+		[
+		]
+		LabelGraphics
+		[
+			text	"SalaryToClear"
+			fontSize	11
+			fontName	"Inter"
+			x	276.0
+			y	695.0447158813477
+		]
+		LabelGraphics
+		[
+			text	"REAL"
+			fontSize	11
+			fontName	"Inter"
+			x	420.0
+			y	695.0447158813477
+		]
+		LabelGraphics
+		[
+		]
+		LabelGraphics
+		[
+			text	"SalaryMiddleClear"
+			fontSize	11
+			fontName	"Inter"
+			x	276.0
+			y	714.3572158813477
+		]
+		LabelGraphics
+		[
+			text	"REAL"
+			fontSize	11
+			fontName	"Inter"
+			x	420.0
+			y	714.3572158813477
+		]
 	]
 	node
 	[
@@ -934,7 +1010,7 @@ graph
 		graphics
 		[
 			x	375.5
-			y	709.9933948516846
+			y	787.2433948516846
 			w	127.0
 			h	67.14735794067383
 			customconfiguration	"DEFAULT"
@@ -958,7 +1034,7 @@ graph
 			fontStyle	"bold"
 			fontName	"Inter"
 			x	336.0
-			y	704.9420738220215
+			y	782.1920738220215
 		]
 		LabelGraphics
 		[
@@ -966,7 +1042,7 @@ graph
 			fontSize	11
 			fontName	"Inter"
 			x	395.0
-			y	704.9420738220215
+			y	782.1920738220215
 		]
 		LabelGraphics
 		[
@@ -978,7 +1054,7 @@ graph
 			fontStyle	"bold"
 			fontName	"Inter"
 			x	336.0
-			y	724.2545738220215
+			y	801.5045738220215
 		]
 		LabelGraphics
 		[
@@ -986,7 +1062,7 @@ graph
 			fontSize	11
 			fontName	"Inter"
 			x	395.0
-			y	724.2545738220215
+			y	801.5045738220215
 		]
 	]
 	node
@@ -995,7 +1071,7 @@ graph
 		graphics
 		[
 			x	96.0
-			y	709.9933948516846
+			y	787.2433948516846
 			w	145.0
 			h	67.14735794067383
 			customconfiguration	"DEFAULT"
@@ -1019,7 +1095,7 @@ graph
 			fontStyle	"bold"
 			fontName	"Inter"
 			x	47.5
-			y	704.9420738220215
+			y	782.1920738220215
 		]
 		LabelGraphics
 		[
@@ -1027,7 +1103,7 @@ graph
 			fontSize	11
 			fontName	"Inter"
 			x	108.5
-			y	704.9420738220215
+			y	782.1920738220215
 		]
 		LabelGraphics
 		[
@@ -1039,7 +1115,7 @@ graph
 			fontStyle	"bold"
 			fontName	"Inter"
 			x	47.5
-			y	724.2545738220215
+			y	801.5045738220215
 		]
 		LabelGraphics
 		[
@@ -1047,7 +1123,7 @@ graph
 			fontSize	11
 			fontName	"Inter"
 			x	108.5
-			y	724.2545738220215
+			y	801.5045738220215
 		]
 	]
 	node
@@ -1368,7 +1444,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 				point
 				[
@@ -1390,7 +1466,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	-0.7371957302093506
+			ySource	-0.7685970067977905
 			xTarget	-1.0
 			yTarget	0.07758843153715134
 		]
@@ -1408,7 +1484,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 				point
 				[
@@ -1430,7 +1506,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	-0.6693459153175354
+			ySource	-0.7088542580604553
 			xTarget	-1.0
 			yTarget	-0.6046536564826965
 		]
@@ -1447,7 +1523,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	0.7554993033409119
+			ySource	0.5457426905632019
 			xTarget	-1.0
 			yTarget	0.07758843153715134
 		]
@@ -1465,7 +1541,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 				point
 				[
@@ -1487,7 +1563,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	0.8233490586280823
+			ySource	0.6054854393005371
 			xTarget	-1.0
 			yTarget	0.07758843153715134
 		]
@@ -1539,7 +1615,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 				point
 				[
@@ -1561,7 +1637,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	0.6197997331619263
+			ySource	0.42625728249549866
 			xTarget	-1.0
 			yTarget	0.07758843153715134
 		]
@@ -1579,12 +1655,12 @@ graph
 				point
 				[
 					x	96.0
-					y	709.9933948516846
+					y	787.2433948516846
 				]
 				point
 				[
 					x	217.0
-					y	731.9108238220215
+					y	809.1608238220215
 				]
 				point
 				[
@@ -1594,7 +1670,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 			]
 		]
@@ -1603,7 +1679,7 @@ graph
 			xSource	1.0
 			ySource	0.6528158187866211
 			xTarget	-1.0
-			yTarget	-0.8728952407836914
+			yTarget	-0.8880824446678162
 		]
 	]
 	edge
@@ -1634,7 +1710,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 			]
 		]
@@ -1643,7 +1719,7 @@ graph
 			xSource	1.0
 			ySource	0.6528158187866211
 			xTarget	-1.0
-			yTarget	-0.8728952407836914
+			yTarget	-0.8880824446678162
 		]
 	]
 	edge
@@ -1660,7 +1736,7 @@ graph
 			xSource	1.0
 			ySource	0.07758843153715134
 			xTarget	-1.0
-			yTarget	-0.8728952407836914
+			yTarget	-0.8880824446678162
 		]
 	]
 	edge
@@ -1676,7 +1752,7 @@ graph
 				point
 				[
 					x	375.5
-					y	371.78353691101074
+					y	410.40853691101074
 				]
 				point
 				[
@@ -1698,7 +1774,7 @@ graph
 		edgeAnchor
 		[
 			xSource	1.0
-			ySource	0.00915178470313549
+			ySource	-0.11142715066671371
 			xTarget	-1.0
 			yTarget	0.07758843153715134
 		]
