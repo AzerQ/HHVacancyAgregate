@@ -21,18 +21,15 @@ def parse_exchange_rates(xml_data):
     rates['BYR'] = rates['BYN']
     return rates
 
-def convert_currency_internal(amount, from_currency, to_currency, rates):
+def currency_not_rouble(currency):
+    return (currency != 'RUB') and (currency != 'RUR')
 
-    if from_currency == 'RUR':
-        from_currency = 'RUB'
+def convert_currency_internal(amount, from_currency, to_currency, rates): 
 
-    if to_currency == 'RUR':
-        to_currency = 'RUB'    
-
-    if from_currency != 'RUB':
+    if currency_not_rouble(from_currency):
         amount = amount * rates[from_currency]
 
-    if to_currency != 'RUB':
+    if currency_not_rouble(to_currency):
         amount = amount / rates[to_currency]
 
     return amount
