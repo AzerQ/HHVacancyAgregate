@@ -2,7 +2,7 @@
 
 namespace HHVacancy.Models.API.Vacancy
 {
-    public class Vacancy
+    public class Vacancy : IVacancyDetail
     {
         [JsonPropertyName("id")]
         public string Id { get; set; }

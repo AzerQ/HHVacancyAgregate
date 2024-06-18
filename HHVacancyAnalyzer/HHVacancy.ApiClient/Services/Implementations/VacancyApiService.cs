@@ -2,6 +2,7 @@
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using HHVacancy.ApiClient.Services.Abstractions;
+using HHVacancy.Models.API;
 using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
 using Polly;
@@ -45,6 +46,8 @@ public class VacancyApiService : IVacancyApiService
     /// Клиент для отправки HTTP запросов
     /// </summary>
     private readonly FlurlClient _flurlClient;
+
+    private readonly int _maxClientRps = 30;
 
 
     /// <summary>
@@ -91,7 +94,7 @@ public class VacancyApiService : IVacancyApiService
 
     }
 
-    public async Task<Vacancy> GetVacancyById(int id)
+    private async Task<IEnumerable<T>> GetVacancyInformation<T>(IEnumerable<int> vacancyIds) where T : IVacancyDetail
     {
         var queryParams = new
         {
@@ -99,13 +102,26 @@ public class VacancyApiService : IVacancyApiService
             host = "hh.ru"
         };
 
-        var serverResponse = await _flurlClient
-                            .Request("vacancies", id)
+
+        var vacacnyReuqests = vacancyIds.Select(async vacancyId =>
+        {
+            return await _flurlClient
+                            .Request("vacancies", vacancyId)
                             .SetQueryParams(queryParams)
                             .SendAsync(HttpMethod.Get);
+        });
 
-        return await serverResponse.GetJsonAsync<Vacancy>();
+        var serverResponses = await Task.WhenAll(vacacnyReuqests);
 
+        return await Task
+            .WhenAll(serverResponses
+            .Select(response => response.GetJsonAsync<T>()));
+    }
+
+    public async Task<Vacancy> GetVacancyById(int id)
+    {
+        IEnumerable<Vacancy> vacancies = await GetVacancyInformation<Vacancy>([id]);
+        return vacancies.First();
     }
 
     private async Task<VacancySearchResult> GetVacancySearchPage(Dictionary<string, object> queryParams)
@@ -163,20 +179,28 @@ public class VacancyApiService : IVacancyApiService
         }
     }
 
-    public async IAsyncEnumerable<Vacancy> GetVacanciesByIds(IEnumerable<int> vacancyIds)
-    {
-        int maxRequestsPerSecond = 15;
 
+    private async Task<T> ExecuteWithRetry<T>(int rps, int retryCount, Func<Task<T>> action)
+    {
         var policy = Policy
             .Handle<FlurlHttpException>()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(1 / maxRequestsPerSecond));
+            .WaitAndRetryAsync(retryCount, retryAttempt => TimeSpan.FromSeconds(1 / rps));
 
+        return await policy.ExecuteAsync(action);
+    }
+
+    public async IAsyncEnumerable<Vacancy> GetVacanciesByIds(IEnumerable<int> vacancyIds)
+    {
         foreach (var id in vacancyIds)
         {
-            yield return await policy.ExecuteAsync(() => GetVacancyById(id));
+            yield return await ExecuteWithRetry(_maxClientRps, 3, () => GetVacancyById(id));
         }
 
-        
+    }
+
+    public async Task<IEnumerable<VacancyDetail>> GetVacancyDetails(IEnumerable<int> vacancyIds)
+    {
+           return await ExecuteWithRetry(_maxClientRps, 3, () => GetVacancyInformation<VacancyDetail>(vacancyIds));
     }
 
     protected virtual void Dispose(bool disposing)
@@ -192,6 +216,11 @@ public class VacancyApiService : IVacancyApiService
         // Не изменяйте этот код. Разместите код очистки в методе "Dispose(bool disposing)".
         Dispose(disposing: true);
         GC.SuppressFinalize(this);
+    }
+
+    public Task<VacancyDetail> GetVacancyDetail(int id)
+    {
+        throw new NotImplementedException();
     }
 }
 

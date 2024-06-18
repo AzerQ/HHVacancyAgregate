@@ -116,7 +116,7 @@ public class VacancyDbService : IVacancyDbService
 
     }
 
-    public async Task InsertVacancyDetails(params VacancyFullInfoDTO[] vacancyFullInfo)
+    public async Task InsertVacancyDetails(params VacancyDetailDTO[] vacancyFullInfo)
     {
         await InsertEntites(db => db.VacancyDetails,
             vacancyFullInfo.Select(info => info.VacancyDetail),

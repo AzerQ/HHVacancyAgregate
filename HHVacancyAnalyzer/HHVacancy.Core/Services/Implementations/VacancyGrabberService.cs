@@ -35,7 +35,7 @@ namespace HHVacancy.Core.Services.Implementations
 
                 await _dbService.InsertVacancies(dbEntities.ToArray());
 
-                var professionalRoleCombined = vacancies.Select(_mappingService.MapProfessionalRolesFromVacancyItem);
+                var professionalRoleCombined = vacancies.Select(_mappingService.MapProfessionalRolesFromVacancyDetail);
 
                 var professionalRoles = professionalRoleCombined.SelectMany( el => el.profRoles).ToArray();
 
@@ -53,7 +53,7 @@ namespace HHVacancy.Core.Services.Implementations
 
                 await foreach (List<Vacancy> vacacncyFullDataBatch in vacancyStream)
                 {
-                   VacancyFullInfoDTO[] vacancyDetails = vacacncyFullDataBatch
+                   VacancyDetailDTO[] vacancyDetails = vacacncyFullDataBatch
                                                                       .Select(_mappingService.MapVacancyInfoDTOFromFullVacancy)
                                                                       .ToArray();
                       

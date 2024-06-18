@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace HHVacancy.Models.DB.Entities
 {
@@ -7,6 +8,7 @@ namespace HHVacancy.Models.DB.Entities
     public class VacancyDetailsEntity
     {
         [Key]
+        [JsonPropertyName("id")]
         public string VacancyId { get; set; }
 
         [ForeignKey(nameof(VacancyId))]

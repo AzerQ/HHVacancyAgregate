@@ -3,7 +3,7 @@ using HHVacancy.Models.DB.Entities.Links;
 
 namespace HHVacancy.Models.DTO
 {
-    public class VacancyFullInfoDTO
+    public class VacancyDetailDTO
     {
         public VacancyDetailsEntity VacancyDetail { get; set; }
 

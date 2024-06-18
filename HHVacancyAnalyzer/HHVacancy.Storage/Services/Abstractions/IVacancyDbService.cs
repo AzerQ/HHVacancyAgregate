@@ -25,6 +25,6 @@ public interface IVacancyDbService : IDisposable
 
     Task InsertVacancies(params VacancyEntity[] vacancies);
 
-    Task InsertVacancyDetails(params VacancyFullInfoDTO[] vacancyFullInfo);
+    Task InsertVacancyDetails(params VacancyDetailDTO[] vacancyFullInfo);
 
 }

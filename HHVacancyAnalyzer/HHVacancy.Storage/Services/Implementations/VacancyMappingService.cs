@@ -1,4 +1,4 @@
-﻿using HHVacancy.Models.API.Vacancy;
+﻿using HHVacancy.Models.API;
 using HHVacancy.Models.API.VacancySearch;
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Models.DB.Entities.Links;
@@ -29,28 +29,30 @@ public class VacancyMappingService : IVacancyMappingService
              : clearKeySkill;
     }
 
-    public VacancyFullInfoDTO MapVacancyInfoDTOFromFullVacancy(Vacancy fullVacancy)
+    public VacancyDetailDTO MapVacancyDetailDTOFromVacancyDetail(IVacancyDetail vacancyDetailItem)
     {
         var vacancyDetail = new VacancyDetailsEntity
         {
-            Description = fullVacancy.Description,
-            VacancyId = fullVacancy.Id
+            Description = vacancyDetailItem.Description,
+            VacancyId = vacancyDetailItem.Id
         };
 
-        KeySkillEntity[] keySkillEntities = fullVacancy.KeySkills.Select(keySkill => new KeySkillEntity
-        {
-            Id = GenerateKeySkillId(keySkill.Name),
-            Name = keySkill.Name
-        }).ToArray();
+        var keySkillEntities = vacancyDetailItem.KeySkills
+                                    .Select(keySkill => new KeySkillEntity
+                                    {
+                                        Id = GenerateKeySkillId(keySkill.Name),
+                                        Name = keySkill.Name
+                                    }).ToArray();
 
-        KeySkillVacancyLinkEntity[] keySkillLinks = keySkillEntities.Select(keySkill => new KeySkillVacancyLinkEntity
-        {
-            KeySkillId = keySkill.Id,
-            VacancyId = fullVacancy.Id
-        }).ToArray();
+        var keySkillLinks = keySkillEntities
+                                    .Select(keySkill => new KeySkillVacancyLinkEntity
+                                    {
+                                        KeySkillId = keySkill.Id,
+                                        VacancyId = vacancyDetailItem.Id
+                                    }).ToArray();
 
 
-        return new VacancyFullInfoDTO
+        return new VacancyDetailDTO
         {
             KeySkillEntities = keySkillEntities,
             KeySkillVacancyLinkEntities = keySkillLinks,
@@ -63,19 +65,5 @@ public class VacancyMappingService : IVacancyMappingService
         return vacancyItem.Adapt<VacancyEntity>();
     }
 
-    public (ProfessionalRoleEntity[] profRoles, ProfessionalRoleVacancyLinkEntity[] profRoleVacancies)
-        MapProfessionalRolesFromVacancyItem(VacancySearchItem vacancyItem)
-    {
-        var professionalRoles = vacancyItem.ProfessionalRoles
-             .Select(profRole => profRole.Adapt<ProfessionalRoleEntity>())
-             .ToArray();
-
-        var profRoleVacancies = vacancyItem.ProfessionalRoles
-            .Select(profRole => new ProfessionalRoleVacancyLinkEntity
-            { ProfessionalRoleId = profRole.Id, VacancyId = vacancyItem.Id })
-            .ToArray();
-
-        return (professionalRoles, profRoleVacancies);
-    }
 }
 
