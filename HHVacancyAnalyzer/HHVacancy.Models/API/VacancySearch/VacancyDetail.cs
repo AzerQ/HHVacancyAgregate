@@ -13,5 +13,8 @@ namespace HHVacancy.Models.API.VacancySearch
 
         [JsonPropertyName("id")]
         public string Id { get; set; }
+
+        [JsonPropertyName("professional_roles")]
+        public List<ProfessionalRole> ProfessionalRoles { get; set; }
     }
 }

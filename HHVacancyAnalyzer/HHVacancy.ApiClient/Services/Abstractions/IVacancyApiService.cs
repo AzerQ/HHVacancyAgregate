@@ -47,7 +47,7 @@ public interface IVacancyApiService : IDisposable
     /// </summary>
     /// <param name="vacancyIds">Идентификаторы вакансий</param>
     /// <returns>Асинхронный потое данных о ключевых навыках и описание вакансий</returns>
-    IAsyncEnumerable<VacancyDetail> GetVacancyDetails(IEnumerable<int> vacancyIds);
+    Task<IEnumerable<VacancyDetail>> GetVacancyDetails(IEnumerable<int> vacancyIds);
 
     /// <summary>
     /// Получить ключевые навыки и описание конкретной вакансии

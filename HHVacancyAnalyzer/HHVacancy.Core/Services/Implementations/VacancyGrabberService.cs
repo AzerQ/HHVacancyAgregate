@@ -1,7 +1,5 @@
 ﻿using HHVacancy.ApiClient.Services.Abstractions;
-using HHVacancy.Core.Extensions;
 using HHVacancy.Core.Services.Abstractions;
-using HHVacancy.Models.API.Vacancy;
 using HHVacancy.Models.API.VacancySearch;
 using HHVacancy.Models.DB.Entities;
 using HHVacancy.Models.DTO;
@@ -28,37 +26,24 @@ namespace HHVacancy.Core.Services.Implementations
 
             await foreach (var vacancySearchPage in _apiService.SearchVacancies(request))
             {
-                List<VacancySearchItem> vacancies = vacancySearchPage.Items;
+                List<VacancySearchItem> vacanciesSearchResults = vacancySearchPage.Items;
 
-                IEnumerable<VacancyEntity> dbEntities =
-                   vacancies.Select(_mappingService.MapVacancyEntityFromVacancyItem);
+                IEnumerable<VacancyEntity> vacancies =
+                   vacanciesSearchResults.Select(_mappingService.MapVacancyEntityFromVacancyItem);
 
-                await _dbService.InsertVacancies(dbEntities.ToArray());
+                await _dbService.InsertVacancies(vacancies.ToArray());
 
-                var professionalRoleCombined = vacancies.Select(_mappingService.MapProfessionalRolesFromVacancyDetail);
+                insertedItemsCount += vacancies.Count();
 
-                var professionalRoles = professionalRoleCombined.SelectMany( el => el.profRoles).ToArray();
+                IEnumerable<int> vacancyIds = vacancies.Select(vacancy => int.Parse(vacancy.Id));
 
-                await _dbService.InsertProfessionalRoles(professionalRoles);
+                IEnumerable<VacancyDetail> vacancyDetails = await _apiService.GetVacancyDetails(vacancyIds);
 
-                var professionalRolesLinks = professionalRoleCombined.SelectMany(el => el.profRoleVacancies).ToArray();
+                VacancyDetailDTO[] vacancyDetailDTOs = vacancyDetails
+                    .Select(_mappingService.MapVacancyDetailDTOFromVacancyDetail)
+                    .ToArray();
 
-                await _dbService.InsertProfessionalRolesLinks(professionalRolesLinks);
-
-                insertedItemsCount += dbEntities.Count();
-
-                IEnumerable<int> vacancyIds = dbEntities.Select(vacancy => int.Parse(vacancy.Id));
-
-                IAsyncEnumerable<List<Vacancy>> vacancyStream = _apiService.GetVacanciesByIds(vacancyIds).Buffer(20);
-
-                await foreach (List<Vacancy> vacacncyFullDataBatch in vacancyStream)
-                {
-                   VacancyDetailDTO[] vacancyDetails = vacacncyFullDataBatch
-                                                                      .Select(_mappingService.MapVacancyInfoDTOFromFullVacancy)
-                                                                      .ToArray();
-                      
-                    await _dbService.InsertVacancyDetails(vacancyDetails);
-                }
+                await _dbService.InsertVacancyDetails(vacancyDetailDTOs);
 
                 float totalCount = Math.Min(request.MaxResults, vacancySearchPage.Found);
 

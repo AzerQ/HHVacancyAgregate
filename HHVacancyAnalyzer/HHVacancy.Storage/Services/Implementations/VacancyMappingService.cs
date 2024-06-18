@@ -51,12 +51,26 @@ public class VacancyMappingService : IVacancyMappingService
                                         VacancyId = vacancyDetailItem.Id
                                     }).ToArray();
 
+        var professionalRolesEntities = vacancyDetailItem.ProfessionalRoles
+            .Select(role => role.Adapt<ProfessionalRoleEntity>())
+            .ToArray();
+
+        var proffesionalRoleLinks = professionalRolesEntities
+            .Select(role =>
+            new ProfessionalRoleVacancyLinkEntity
+            {
+                ProfessionalRoleId = role.Id,
+                VacancyId = vacancyDetail.VacancyId
+            }).ToArray();
+
 
         return new VacancyDetailDTO
         {
             KeySkillEntities = keySkillEntities,
             KeySkillVacancyLinkEntities = keySkillLinks,
-            VacancyDetail = vacancyDetail
+            VacancyDetail = vacancyDetail,
+            ProfessionalRoleEntities = professionalRolesEntities,
+            ProfessionalRoleVacancyLinkEntities = proffesionalRoleLinks
         };
     }
 

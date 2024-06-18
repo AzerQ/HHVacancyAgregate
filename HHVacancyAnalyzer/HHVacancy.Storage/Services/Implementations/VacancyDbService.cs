@@ -130,6 +130,13 @@ public class VacancyDbService : IVacancyDbService
               vacancyFullInfo.SelectMany(info => info.KeySkillVacancyLinkEntities),
               ksvac => new { ksvac.VacancyId, ksvac.KeySkillId });
 
+        await InsertProfessionalRoles(vacancyFullInfo
+            .SelectMany(info => info.ProfessionalRoleEntities)
+            .ToArray());
+
+        await InsertProfessionalRolesLinks(vacancyFullInfo
+            .SelectMany(info => info.ProfessionalRoleVacancyLinkEntities)
+            .ToArray());
     }
 
     protected virtual void Dispose(bool disposing)

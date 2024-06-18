@@ -200,7 +200,7 @@ public class VacancyApiService : IVacancyApiService
 
     public async Task<IEnumerable<VacancyDetail>> GetVacancyDetails(IEnumerable<int> vacancyIds)
     {
-           return await ExecuteWithRetry(_maxClientRps, 3, () => GetVacancyInformation<VacancyDetail>(vacancyIds));
+           return await GetVacancyInformation<VacancyDetail>(vacancyIds);
     }
 
     protected virtual void Dispose(bool disposing)
