@@ -13,6 +13,6 @@ namespace HHVacancy.Models.DTO
 
         public ProfessionalRoleEntity[] ProfessionalRoleEntities { get; set; }
 
-        public ProfessionalRoleVacancyLinkEntity[] ProfessionalRoleVacancyLinkEntities  {get; set }
+        public ProfessionalRoleVacancyLinkEntity[] ProfessionalRoleVacancyLinkEntities  {get; set; }
     }
 }
