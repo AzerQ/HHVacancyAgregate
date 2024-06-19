@@ -147,17 +147,10 @@ public class VacancyApiService : IVacancyApiService
         public int Found { get; set; }
     }
 
-
+    
     private async Task<Pagination> GetRequestPagination(VacancySearchRequest vacancySearchRequest)
     {
-
-        var requestParams = vacancySearchRequest.ToDictionary(pageNumber: 0, pageSize: 0);
-
-        var serverResponse = await _flurlClient.Request("vacancies")
-                                  .SetQueryParams(requestParams)
-                                  .GetJsonAsync<RequestResultsCount>();
-
-        int totalSize = serverResponse.Found;
+        int totalSize = await GetSearchQueryResultsCount(vacancySearchRequest);
 
         int resultsCount = new int[] { totalSize, _maxItemsSize, vacancySearchRequest.MaxResults }.Min();
 
@@ -213,8 +206,13 @@ public class VacancyApiService : IVacancyApiService
 
     public async Task<int> GetSearchQueryResultsCount(VacancySearchRequest vacancySearchRequest)
     {
-       var requestPagination = await GetRequestPagination(vacancySearchRequest);
-        return requestPagination.TotalSize;
+        var requestParams = vacancySearchRequest.ToDictionary(pageNumber: 0, pageSize: 0);
+
+        var serverResponse = await _flurlClient.Request("vacancies")
+                                  .SetQueryParams(requestParams)
+                                  .GetJsonAsync<RequestResultsCount>();
+
+        return serverResponse.Found;
     }
 
     protected virtual void Dispose(bool disposing)

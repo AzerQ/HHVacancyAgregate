@@ -7,13 +7,15 @@ using HHVacancy.Storage.Services.Abstractions;
 
 namespace HHVacancy.Core.Services.Implementations
 {
-    class GlobalWorkProgress
+    class VacanciesWorkProgress
     {
         public double InsertedCount { get; set; }
 
         public double TotalCount { get; set; }
 
         public double TotalProgress => InsertedCount / TotalCount;
+
+        public bool IsDone => InsertedCount >= TotalCount;
     }
 
     public class VacancyGrabberService : IVacancyGrabberService
@@ -65,11 +67,11 @@ namespace HHVacancy.Core.Services.Implementations
         }
 
         private async Task<int> GrabLimitedVacanciesCount(VacancySearchRequest request, IProgress<double> progress,
-            GlobalWorkProgress? workProgress = default)
+            VacanciesWorkProgress? workProgress = default)
         {
             if (workProgress == null)
             {
-                workProgress = new GlobalWorkProgress();
+                workProgress = new VacanciesWorkProgress();
             }
 
             await foreach (var vacancySearchPage in _apiService.SearchVacancies(request))
@@ -112,7 +114,6 @@ namespace HHVacancy.Core.Services.Implementations
                 return await GrabLimitedVacanciesCount(request, progress);
             }
 
-            int totalCount = 0;
             int searchResultCount = await _apiService.GetSearchQueryResultsCount(request);
 
             int limit = new int[] { searchResultCount, request.MaxResults, MaxSearchResultsByQuery }
@@ -120,17 +121,18 @@ namespace HHVacancy.Core.Services.Implementations
 
             TimeSpan interval = await ProbeInterval(request);
             DateTime toDate = DateTime.Now;
-            var workProgress = new GlobalWorkProgress { TotalCount = limit };
+            var workProgress = new VacanciesWorkProgress { TotalCount = limit, InsertedCount = 0 };
 
-            while (totalCount <= limit)
+            while (!workProgress.IsDone)
             {
                 DateTime fromDate = toDate.Subtract(interval);
                 request.DateFrom = fromDate;
                 request.DateTo = toDate;
-                totalCount += await GrabLimitedVacanciesCount(request, progress, workProgress);
+                await GrabLimitedVacanciesCount(request, progress, workProgress);
+                toDate = fromDate.Subtract(TimeSpan.FromDays(1));
             }
 
-            return totalCount;
+            return (int)workProgress.InsertedCount;
         }
     }
 }
