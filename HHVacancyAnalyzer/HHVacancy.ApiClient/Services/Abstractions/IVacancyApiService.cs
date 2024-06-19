@@ -12,6 +12,11 @@ namespace HHVacancy.ApiClient.Services.Abstractions;
 public interface IVacancyApiService : IDisposable
 {
     /// <summary>
+    /// Максимальное ограничение при поиске вакансий
+    /// </summary>
+    int MaxSearchResults { get; }
+
+    /// <summary>
     /// Получить полные данные вакансии по ее идентификатору
     /// </summary>
     /// <remarks>GET {{baseUrl}}/vacancies/:vacancy_id</remarks>
@@ -55,4 +60,11 @@ public interface IVacancyApiService : IDisposable
     /// <param name="id">Идентификатор вакансии</param>
     /// <returns>Расширенные данные вакансии</returns>
     Task<VacancyDetail> GetVacancyDetail(int id);
+    
+    /// <summary>
+    /// Получить предварительное количество результатов по поисковому запросу
+    /// </summary>
+    /// <param name="vacancySearchRequest">Поисковый запрос</param>
+    /// <returns>Кол-во найденных по поисковым фильтрам записей</returns>
+    Task<int> GetSearchQueryResultsCount(VacancySearchRequest vacancySearchRequest);
 }

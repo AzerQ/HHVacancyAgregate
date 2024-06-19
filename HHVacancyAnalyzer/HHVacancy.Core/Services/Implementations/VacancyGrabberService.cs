@@ -7,11 +7,21 @@ using HHVacancy.Storage.Services.Abstractions;
 
 namespace HHVacancy.Core.Services.Implementations
 {
+    class GlobalWorkProgress
+    {
+        public double InsertedCount { get; set; }
+
+        public double TotalCount { get; set; }
+
+        public double TotalProgress => InsertedCount / TotalCount;
+    }
+
     public class VacancyGrabberService : IVacancyGrabberService
     {
         private IVacancyApiService _apiService;
         private IVacancyMappingService _mappingService;
         private IVacancyDbService _dbService;
+
 
         public VacancyGrabberService(IVacancyApiService apiService, IVacancyMappingService vacancyMappingService, IVacancyDbService dbService)
         {
@@ -20,9 +30,47 @@ namespace HHVacancy.Core.Services.Implementations
             _dbService = dbService;
         }
 
-        public async Task<int> GrabVacancySearchResults(VacancySearchRequest request, IProgress<double> progress)
+        public int MaxSearchResultsByQuery => 10_000;
+
+        private TimeSpan[] _avaibleIntervals = [TimeSpan.FromDays(60),TimeSpan.FromDays(45), TimeSpan.FromDays(30),
+                                               TimeSpan.FromDays(14),TimeSpan.FromDays(7), TimeSpan.FromDays(3)];
+
+        /// <summary>
+        /// Подбор интервала для ограничения поиска вакансий по датам
+        /// </summary>
+        /// <param name="vacancySearchRequest">Поисковый запрос вакансий</param>
+        /// <returns>Наиболее подходящий интервал между датами в  днях</returns>
+        private async Task<TimeSpan> ProbeInterval(VacancySearchRequest vacancySearchRequest)
         {
-            int insertedItemsCount = 0;
+            var sortedIntervals = _avaibleIntervals.OrderByDescending(item => item);
+
+            DateTime now = DateTime.Now;
+
+            foreach (TimeSpan interval in sortedIntervals)
+            {
+                DateTime startDate = now.Subtract(interval);
+
+                vacancySearchRequest.DateFrom = startDate;
+                vacancySearchRequest.DateTo = now;
+
+                int resultsCount = await _apiService.GetSearchQueryResultsCount(vacancySearchRequest);
+
+                if (resultsCount <= _apiService.MaxSearchResults)
+                {
+                    return interval;
+                }
+            }
+
+            return sortedIntervals.Last();
+        }
+
+        private async Task<int> GrabLimitedVacanciesCount(VacancySearchRequest request, IProgress<double> progress,
+            GlobalWorkProgress? workProgress = default)
+        {
+            if (workProgress == null)
+            {
+                workProgress = new GlobalWorkProgress();
+            }
 
             await foreach (var vacancySearchPage in _apiService.SearchVacancies(request))
             {
@@ -33,7 +81,7 @@ namespace HHVacancy.Core.Services.Implementations
 
                 await _dbService.InsertVacancies(vacancies.ToArray());
 
-                insertedItemsCount += vacancies.Count();
+                workProgress.InsertedCount += vacancies.Count();
 
                 IEnumerable<int> vacancyIds = vacancies.Select(vacancy => int.Parse(vacancy.Id));
 
@@ -45,15 +93,44 @@ namespace HHVacancy.Core.Services.Implementations
 
                 await _dbService.InsertVacancyDetails(vacancyDetailDTOs);
 
-                float totalCount = Math.Min(request.MaxResults, vacancySearchPage.Found);
+                if (workProgress.TotalCount == default)
+                {
+                    workProgress.TotalCount = Math.Min(request.MaxResults, vacancySearchPage.Found);
+                }
 
-                double doneProgress = insertedItemsCount / totalCount;
-
-                progress?.Report(doneProgress);
+                progress?.Report(workProgress.TotalProgress);
 
             }
+            return (int)workProgress.TotalCount;
+        }
 
-            return insertedItemsCount;
+
+        public async Task<int> GrabVacancySearchResults(VacancySearchRequest request, IProgress<double> progress)
+        {
+            if (request.MaxResults <= _apiService.MaxSearchResults)
+            {
+                return await GrabLimitedVacanciesCount(request, progress);
+            }
+
+            int totalCount = 0;
+            int searchResultCount = await _apiService.GetSearchQueryResultsCount(request);
+
+            int limit = new int[] { searchResultCount, request.MaxResults, MaxSearchResultsByQuery }
+                                    .Min();
+
+            TimeSpan interval = await ProbeInterval(request);
+            DateTime toDate = DateTime.Now;
+            var workProgress = new GlobalWorkProgress { TotalCount = limit };
+
+            while (totalCount <= limit)
+            {
+                DateTime fromDate = toDate.Subtract(interval);
+                request.DateFrom = fromDate;
+                request.DateTo = toDate;
+                totalCount += await GrabLimitedVacanciesCount(request, progress, workProgress);
+            }
+
+            return totalCount;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace HHVacancy.ConsoleApp
 
     public class Program
     {
-        const int MaxSearchItemsSize = 1500;
+        const int MaxSearchItemsSize = 5_000;
 
         public static IEnumerable<string> GetFromUserPrompt()
         {
@@ -62,7 +62,7 @@ namespace HHVacancy.ConsoleApp
 
             Progress<float> progress = new Progress<float>(percent => Console.WriteLine("{0} % complete", percent));
 
-            IEnumerable<string> searchStrings = GetFromFile("SearchInputs.txt");
+            IEnumerable<string> searchStrings = GetFromUserPrompt(); //GetFromFile("SearchInputs.txt");
 
             foreach (string searchString in searchStrings)
             {

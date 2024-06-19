@@ -118,6 +118,8 @@ public class VacancyApiService : IVacancyApiService
             .Select(response => response.GetJsonAsync<T>()));
     }
 
+    public int MaxSearchResults => _maxItemsSize;
+
     public async Task<Vacancy> GetVacancyById(int id)
     {
         IEnumerable<Vacancy> vacancies = await GetVacancyInformation<Vacancy>([id]);
@@ -203,6 +205,18 @@ public class VacancyApiService : IVacancyApiService
            return await GetVacancyInformation<VacancyDetail>(vacancyIds);
     }
 
+    public async Task<VacancyDetail> GetVacancyDetail(int id)
+    {
+        var results = await GetVacancyDetails([id]);
+        return results.First();
+    }
+
+    public async Task<int> GetSearchQueryResultsCount(VacancySearchRequest vacancySearchRequest)
+    {
+       var requestPagination = await GetRequestPagination(vacancySearchRequest);
+        return requestPagination.TotalSize;
+    }
+
     protected virtual void Dispose(bool disposing)
     {
         if (disposing)
@@ -218,9 +232,5 @@ public class VacancyApiService : IVacancyApiService
         GC.SuppressFinalize(this);
     }
 
-    public Task<VacancyDetail> GetVacancyDetail(int id)
-    {
-        throw new NotImplementedException();
-    }
 }
 
