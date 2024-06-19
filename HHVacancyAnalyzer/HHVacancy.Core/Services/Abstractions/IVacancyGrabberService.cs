@@ -9,6 +9,6 @@ namespace HHVacancy.Core.Services.Abstractions
         /// </summary>
         /// <param name="request">Запрос для поиска вакансий</param>
         /// <returns>Кол-во найденных и сохраненных записей</returns>
-        Task<int> GrabVacancySearchResults(VacancySearchRequest request, IProgress<float> progress);
+        Task<int> GrabVacancySearchResults(VacancySearchRequest request, IProgress<double> progress);
     }
 }
