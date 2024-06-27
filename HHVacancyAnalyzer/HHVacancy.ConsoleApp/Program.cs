@@ -2,7 +2,6 @@
 using HHVacancy.Core.Services.Abstractions;
 using HHVacancy.Models.API.VacancySearch;
 using Luna.ConsoleProgressBar;
-using System;
 using System.Diagnostics;
 
 namespace HHVacancy.ConsoleApp
@@ -24,7 +23,7 @@ namespace HHVacancy.ConsoleApp
             return File.ReadAllLines(path);
         }
 
-        private static async Task SearchQuery(IVacancyGrabberService vacancyGrabberService, string query)
+        private static async Task SearchQuery(IVacancyGrabberService vacancyGrabberService, string query, bool searchOnlyWithSalary)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
@@ -34,7 +33,7 @@ namespace HHVacancy.ConsoleApp
                 Console.Write("Поиск вакансий по запросу {0} ", query);
                 var vacancySearchRequest = new VacancySearchRequest
                 {
-                    OnlyWithSalary = true,
+                    OnlyWithSalary = searchOnlyWithSalary,
                     Text = query,
                     MaxResults = MaxSearchItemsSize,
                     ResponsesCountEnabled = true
@@ -64,9 +63,15 @@ namespace HHVacancy.ConsoleApp
 
             IEnumerable<string> searchStrings = GetFromUserPrompt(); //GetFromFile("SearchInputs.txt");
 
+            Console.Write("Вы хотите искать вакансии только с указанной З/П (Д/Н)?: ");
+
+            string input = Console.ReadLine().Trim().ToUpper();
+
+            bool onlyWithSalary = input.StartsWith("Д");
+
             foreach (string searchString in searchStrings)
             {
-                await SearchQuery(vacancyGrabberService, searchString);
+                await SearchQuery(vacancyGrabberService, searchString, onlyWithSalary);
             }
         }
 
