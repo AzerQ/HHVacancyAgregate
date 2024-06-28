@@ -116,7 +116,7 @@ public class VacancyDbService : IVacancyDbService
 
     }
 
-    public async Task InsertVacancyDetails(params VacancyFullInfoDTO[] vacancyFullInfo)
+    public async Task InsertVacancyDetails(params VacancyDetailDTO[] vacancyFullInfo)
     {
         await InsertEntites(db => db.VacancyDetails,
             vacancyFullInfo.Select(info => info.VacancyDetail),
@@ -130,6 +130,13 @@ public class VacancyDbService : IVacancyDbService
               vacancyFullInfo.SelectMany(info => info.KeySkillVacancyLinkEntities),
               ksvac => new { ksvac.VacancyId, ksvac.KeySkillId });
 
+        await InsertProfessionalRoles(vacancyFullInfo
+            .SelectMany(info => info.ProfessionalRoleEntities)
+            .ToArray());
+
+        await InsertProfessionalRolesLinks(vacancyFullInfo
+            .SelectMany(info => info.ProfessionalRoleVacancyLinkEntities)
+            .ToArray());
     }
 
     protected virtual void Dispose(bool disposing)

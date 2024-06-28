@@ -1,13 +1,15 @@
 ﻿using HHVacancy.Core;
 using HHVacancy.Core.Services.Abstractions;
 using HHVacancy.Models.API.VacancySearch;
+using Luna.ConsoleProgressBar;
+using System.Diagnostics;
 
 namespace HHVacancy.ConsoleApp
 {
 
     public class Program
     {
-        const int MaxSearchItemsSize = 500;
+        const int MaxSearchItemsSize = 5_000;
 
         public static IEnumerable<string> GetFromUserPrompt()
         {
@@ -21,6 +23,36 @@ namespace HHVacancy.ConsoleApp
             return File.ReadAllLines(path);
         }
 
+        private static async Task SearchQuery(IVacancyGrabberService vacancyGrabberService, string query, bool searchOnlyWithSalary)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+
+            using (var progressBar = new ConsoleProgressBar())
+            {
+
+                Console.Write("Поиск вакансий по запросу {0} ", query);
+                var vacancySearchRequest = new VacancySearchRequest
+                {
+                    OnlyWithSalary = searchOnlyWithSalary,
+                    Text = query,
+                    MaxResults = MaxSearchItemsSize,
+                    ResponsesCountEnabled = true
+                };
+
+                int findedResults = await vacancyGrabberService
+                    .GrabVacancySearchResults(vacancySearchRequest, progressBar);
+
+                double totalSecondsEllapsed = sw.Elapsed.TotalSeconds;
+
+                double recordsPerSecond = Math.Round(findedResults / totalSecondsEllapsed, 2);
+
+                Console.WriteLine();
+                Console.WriteLine("Найденно и сохранено {0} записей ({1} элем. / с ) по запросу: '{2}'",
+                    findedResults, recordsPerSecond, query);
+                Console.WriteLine();
+            }
+
+        }
 
         static async Task Main(string[] args)
         {
@@ -29,23 +61,17 @@ namespace HHVacancy.ConsoleApp
 
             Progress<float> progress = new Progress<float>(percent => Console.WriteLine("{0} % complete", percent));
 
-            IEnumerable<string> searchStrings = GetFromFile("SearchInputs.txt");
+            IEnumerable<string> searchStrings = GetFromUserPrompt(); //GetFromFile("SearchInputs.txt");
+
+            Console.Write("Вы хотите искать вакансии только с указанной З/П (Д/Н)?: ");
+
+            string input = Console.ReadLine().Trim().ToUpper();
+
+            bool onlyWithSalary = input.StartsWith("Д");
 
             foreach (string searchString in searchStrings)
             {
-                var vacancySearchRequest = new VacancySearchRequest
-                {
-                    OnlyWithSalary = true,
-                    Text = searchString,
-                    MaxResults = MaxSearchItemsSize,
-                    ResponsesCountEnabled = true
-                };
-
-                int findedResults = await vacancyGrabberService
-                    .GrabVacancySearchResults(vacancySearchRequest, progress);
-
-                Console.WriteLine("Найденно и сохранено {0} записей по запросу: '{1}'", findedResults, searchString);
-
+                await SearchQuery(vacancyGrabberService, searchString, onlyWithSalary);
             }
         }
 
