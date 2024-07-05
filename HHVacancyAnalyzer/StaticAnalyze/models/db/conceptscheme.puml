@@ -1,0 +1,75 @@
+@startuml VacancyDbConcept
+
+entity "Вакансии" as Vacancies {
+  * КлючВакансии
+  --
+  Название
+  Описание
+  Минимальная зарплата
+  Максимальная зарплата
+  Валюта зарплаты
+  Валовая зарплата
+  Дата публикации
+  Количество откликов
+  Общее количество откликов
+  --
+  КлючРегиона
+  КлючРаботодателя
+  КлючОпыта
+  КлючТипаЗанятости
+  КлючГрафикаРаботы
+}
+
+entity "Работодатели" as Employers {
+  * КлючРаботодателя
+  --
+  Название
+  Доверенность
+  URL
+  URL вакансий
+}
+
+entity "Регионы" as Areas {
+  * КлючРегиона
+  --
+  Название
+}
+
+entity "Опыт работы" as Experience {
+  * КлючОпытаРаботы
+  --
+  Описание
+}
+
+entity "Типы занятости" as Employment {
+  * КлючТипаЗанятости
+  --
+  Описание
+}
+
+entity "Графики работы" as Schedule {
+  * КлючГрафикаРаботы
+  --
+  Описание
+}
+
+entity "Навыки" as KeySkills {
+  * КлючНавыка
+  --
+  Название
+}
+
+entity "Связь навыков и вакансий" as KeySkillVacancyLinks {
+  * КлючНавыка
+  * КлючВакансии
+}
+
+Vacancies }|--|| Areas
+Vacancies }|--|| Employers
+Vacancies }|--|| Experience
+Vacancies }|--|| Employment
+Vacancies }|--|| Schedule
+KeySkillVacancyLinks }|--|| Vacancies
+KeySkillVacancyLinks }|--|| KeySkills
+
+@enduml
