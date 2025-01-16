@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Job Search App Prototype</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <!-- Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .navbar {
+      margin-bottom: 20px;
+    }
+
+    .nav-link.active {
+      font-weight: 600;
+      color: #0d6efd !important;
+    }
+
+    .job-card {
+      border: 1px solid #dee2e6;
+      border-radius: 5px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+    <!-- Навигационная панель (navbar) -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand ms-3" href="#">JobApp</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto me-3">
+          <li class="nav-item">
+            <a class="nav-link" href="#" :class="{ active: currentView === 'home-page' }"
+              @click.prevent="switchView('home-page')">
+              Главная
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" :class="{ active: currentView === 'search-page' }"
+              @click.prevent="switchView('search-page')">
+              Поиск
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" :class="{ active: currentView === 'analytics-page' }"
+              @click.prevent="switchView('analytics-page')">
+              Аналитика
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" :class="{ active: currentView === 'profile-page' }"
+              @click.prevent="switchView('profile-page')">
+              Профиль
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Динамическое место под контент -->
+    <component :is="currentView"></component>
+  </div>
+
+  <!-- ======================== Шаблоны ======================== -->
+
+  <!-- Главная страница -->
+  <template id="homePage">
+    <div class="container">
+      <h2>Добро пожаловать!</h2>
+      <p>
+        Это главная страница приложения для поиска вакансий.
+        Перейдите во вкладку <strong>Поиск</strong>, чтобы найти интересующие вакансии,
+        или откройте <strong>Аналитику</strong> для просмотра статистики по рынку труда.
+        В <strong>Профиле</strong> можно управлять уведомлениями и сохранёнными запросами.
+      </p>
+    </div>
+  </template>
+
+  <!-- Поиск вакансий с дополнительными фильтрами -->
+  <template id="searchPage">
+    <div class="container">
+      <h2>Поиск вакансий</h2>
+      <div class="row mb-3">
+        <!-- Ключевые слова -->
+        <div class="col-md-4">
+          <label for="searchKeywords" class="form-label">Ключевые слова</label>
+          <input type="text" id="searchKeywords" class="form-control" v-model="query"
+            placeholder="Введите ключевые слова..." />
+        </div>
+        <!-- Мин. зарплата (Range) -->
+        <div class="col-md-4">
+          <label for="minSalary" class="form-label">Мин. зарплата: {{ minSalary }} ₽</label>
+          <input type="range" id="minSalary" class="form-range" v-model="minSalary" min="0" max="300000" step="10000" />
+        </div>
+        <!-- Тип занятости (Radio Buttons) -->
+        <div class="col-md-4">
+          <label class="form-label">Тип занятости</label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="typeAny" name="jobType" value="" v-model="employmentType"
+              checked />
+            <label class="form-check-label" for="typeAny">Любой</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="typeFull" name="jobType" value="Полная"
+              v-model="employmentType" />
+            <label class="form-check-label" for="typeFull">Полная</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="typePart" name="jobType" value="Частичная"
+              v-model="employmentType" />
+            <label class="form-check-label" for="typePart">Частичная</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" id="typeRemote" name="jobType" value="Удаленная"
+              v-model="employmentType" />
+            <label class="form-check-label" for="typeRemote">Удаленная</label>
+          </div>
+        </div>
+      </div>
+      <!-- Регион (отдельным блоком) -->
+      <div class="row mb-3">
+        <div class="col-md-4">
+          <label for="regionSelect" class="form-label">Регион</label>
+          <select id="regionSelect" class="form-control" v-model="region">
+            <option value="">Любой</option>
+            <option value="Москва">Москва</option>
+            <option value="Санкт-Петербург">Санкт-Петербург</option>
+            <option value="Новосибирск">Новосибирск</option>
+            <option value="Екатеринбург">Екатеринбург</option>
+            <option value="Казань">Казань</option>
+          </select>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button class="btn btn-primary w-100" @click="performSearch">
+            Искать
+          </button>
+        </div>
+      </div>
+
+      <!-- Отображение результатов -->
+      <div v-for="(job, index) in searchResults" :key="index" class="job-card">
+        <h5>{{ job.title }}</h5>
+        <p class="mb-1">Компания: {{ job.company }}</p>
+        <p class="mb-1">Зарплата: {{ job.salary }} ₽</p>
+        <p class="mb-1">Регион: {{ job.region }}</p>
+        <p class="mb-1">Тип занятости: {{ job.employmentType }}</p>
+        <button class="btn btn-outline-secondary btn-sm mt-2">
+          Подробнее
+        </button>
+      </div>
+    </div>
+  </template>
+
+  <!-- Аналитика (пример с использованием Chart.js) -->
+  <template id="analyticsPage">
+    <div class="container">
+      <h2>Аналитика рынка труда</h2>
+      <div class="alert alert-info">
+        <strong>Пример:</strong> Наиболее востребованные навыки в текущем месяце — Java (35%) и Python (25%).
+      </div>
+
+      <!-- Canvas для Chart.js -->
+      <canvas id="skillsChart" width="400" height="200"></canvas>
+    </div>
+  </template>
+
+  <!-- Профиль -->
+  <template id="profilePage">
+    <div class="container">
+      <h2>Мой профиль</h2>
+      <div class="card mb-3">
+        <div class="card-header">Основные данные</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="userName" class="form-label">Имя</label>
+            <input type="text" id="userName" class="form-control" v-model="userName" />
+          </div>
+          <div class="mb-3">
+            <label for="userEmail" class="form-label">E-mail</label>
+            <input type="email" id="userEmail" class="form-control" v-model="userEmail" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-header">Уведомления</div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="emailNotif" v-model="notifications.email" />
+            <label class="form-check-label" for="emailNotif">
+              Получать E-mail уведомления
+            </label>
+          </div>
+          <div class="form-check form-switch mb-2">
+            <input class="form-check-input" type="checkbox" id="pushNotif" v-model="notifications.push" />
+            <label class="form-check-label" for="pushNotif">
+              Пуш-уведомления
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-success" @click="saveProfile">
+        Сохранить изменения
+      </button>
+    </div>
+  </template>
+
+  <script>
+    /* Главная страница */
+    Vue.component('home-page', {
+      template: '#homePage'
+    })
+
+    /* Поиск */
+    Vue.component('search-page', {
+      template: '#searchPage',
+      data() {
+        return {
+          query: '',
+          region: '',
+          minSalary: 0,
+          employmentType: '',
+          searchResults: []
+        }
+      },
+      methods: {
+        performSearch() {
+          // Расширенный список фейковых вакансий (10 шт.)
+          const allJobs = [
+            {
+              title: 'Frontend Developer',
+              company: 'TechCorp',
+              salary: 120000,
+              region: 'Москва',
+              employmentType: 'Полная'
+            },
+            {
+              title: 'Backend Developer',
+              company: 'DataSystems',
+              salary: 150000,
+              region: 'Санкт-Петербург',
+              employmentType: 'Частичная'
+            },
+            {
+              title: 'Data Analyst',
+              company: 'InsightsLab',
+              salary: 100000,
+              region: 'Новосибирск',
+              employmentType: 'Удаленная'
+            },
+            {
+              title: 'Project Manager',
+              company: 'SoftSolutions',
+              salary: 130000,
+              region: 'Екатеринбург',
+              employmentType: 'Полная'
+            },
+            {
+              title: 'QA Engineer',
+              company: 'QualityFirst',
+              salary: 90000,
+              region: 'Казань',
+              employmentType: 'Полная'
+            },
+            {
+              title: 'DevOps Specialist',
+              company: 'CloudCorp',
+              salary: 160000,
+              region: 'Москва',
+              employmentType: 'Частичная'
+            },
+            {
+              title: 'Mobile Developer',
+              company: 'AppsVision',
+              salary: 110000,
+              region: 'Санкт-Петербург',
+              employmentType: 'Удаленная'
+            },
+            {
+              title: 'Game Developer',
+              company: 'FunGames',
+              salary: 115000,
+              region: 'Екатеринбург',
+              employmentType: 'Полная'
+            },
+            {
+              title: 'Data Scientist',
+              company: 'InsightsLab',
+              salary: 200000,
+              region: 'Новосибирск',
+              employmentType: 'Удаленная'
+            },
+            {
+              title: 'System Administrator',
+              company: 'LocalNet',
+              salary: 80000,
+              region: 'Москва',
+              employmentType: 'Полная'
+            }
+          ]
+
+          this.searchResults = allJobs.filter(job => {
+            const matchQuery = this.query
+              ? job.title.toLowerCase().includes(this.query.toLowerCase())
+              || job.company.toLowerCase().includes(this.query.toLowerCase())
+              : true
+            const matchRegion = this.region
+              ? job.region === this.region
+              : true
+            const matchSalary = job.salary >= this.minSalary
+            const matchEmployment = this.employmentType
+              ? job.employmentType === this.employmentType
+              : true
+
+            return matchQuery && matchRegion && matchSalary && matchEmployment
+          })
+        }
+      }
+    })
+
+    /* Аналитика (Chart.js пример) */
+    Vue.component('analytics-page', {
+      template: '#analyticsPage',
+      mounted() {
+        // Инициализация Chart.js
+        const ctx = document.getElementById('skillsChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Java', 'Python', 'SQL', 'C++'],
+            datasets: [{
+              label: 'Востребованность навыков (%)',
+              data: [35, 25, 20, 10],
+              backgroundColor: [
+                'rgba(54, 162, 235, 0.7)',
+                'rgba(255, 206, 86, 0.7)',
+                'rgba(75, 192, 192, 0.7)',
+                'rgba(153, 102, 255, 0.7)'
+              ],
+              borderColor: [
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true,
+                  max: 100
+                }
+              }]
+            }
+          }
+        })
+      }
+    })
+
+    /* Профиль */
+    Vue.component('profile-page', {
+      template: '#profilePage',
+      data() {
+        return {
+          userName: 'Иван Иванов',
+          userEmail: 'user@example.com',
+          notifications: {
+            email: true,
+            push: false
+          }
+        }
+      },
+      methods: {
+        saveProfile() {
+          alert('Изменения в профиле сохранены!');
+        }
+      }
+    })
+
+    /* Основная Vue-инстанция */
+    new Vue({
+      el: '#app',
+      data: {
+        currentView: 'home-page'
+      },
+      methods: {
+        switchView(viewName) {
+          this.currentView = viewName
+        }
+      }
+    })
+  </script>
+
+  <!-- Bootstrap JS (включая Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js">
+  </script>
+
+</body>
+
+</html>
